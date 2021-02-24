@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import SignIn from '../pages/SignIn';
@@ -16,7 +16,11 @@ const AuthRoutes: React.FC = () => {
                 headerShown: false,
                 cardStyle: {
                     backgroundColor: '#fdfdfd'
-                }
+                },
+                gestureDirection: "horizontal",
+                gestureEnabled: false,
+                cardStyleInterpolator:
+                  CardStyleInterpolators.forHorizontalIOS,
             }}
         >
             <Auth.Screen name="InitialScreen" component={InitialScreen} />

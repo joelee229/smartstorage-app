@@ -1,6 +1,6 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { View, Text } from 'react-native';
+// import { StatusBar } from 'expo-status-bar';
+import { View, Text, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { Roboto_400Regular, Roboto_500Medium, useFonts} from '@expo-google-fonts/roboto';
 import { Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
@@ -21,7 +21,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <StatusBar style="auto" />
+      <StatusBar barStyle="dark-content" backgroundColor="#fdfdfd" />
       <Routes />
     </NavigationContainer>
   );
