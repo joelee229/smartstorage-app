@@ -80,7 +80,7 @@ const Input: React.ForwardRefRenderFunction<InputRef ,InputProps> = ({label, nam
             <Label>
                 {label}
             </Label>
-            <Container isFocused={isFocused}>
+            <Container isFocused={isFocused} isErrored={!!error} >
                 <TextInput 
                     defaultValue={defaultValue}
                     onChangeText={(value) => {

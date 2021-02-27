@@ -1,12 +1,14 @@
 import React, { useCallback, useRef } from 'react';
 import { Feather as Icon, FontAwesome5 as FaIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { View, KeyboardAvoidingView, Platform, ScrollView, TextInput } from 'react-native';
+import { View, KeyboardAvoidingView, Platform, ScrollView, TextInput, Alert } from 'react-native';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
+import * as Yup from 'yup';
 
 import { Container, Title, Button, CreateAccountButton, CreateAccountButtonText, BackButton } from './styles';
 import Input from '../../components/Input';
+import getValidationErrors from '../../utils/getValidationErrors';
 
 const SignIn: React.FC = () => {
     // useRef cria uma ref para manipular um elemento diretamente
@@ -16,8 +18,46 @@ const SignIn: React.FC = () => {
     const passwordRef = useRef<TextInput>(null);
     const navigation = useNavigation();
 
-    const handleSignIn = useCallback((data: object) => {
-        console.log(data);
+    const handleSignIn = useCallback(async (data: object) => {
+        try {
+            formRef.current?.setErrors({});
+            // Criar um schema para o data que está vindo
+            const schema = Yup.object().shape({
+                user: Yup.string()
+                    .required("Nome obrigatório"),
+                email: Yup.string()
+                    .email("Email inválido")
+                    .required("Email obrigatório"),
+                password: Yup.string()
+                    .min(8, "No mínimo 8 caractéres")
+                    .matches(
+                        /^(?=\D*\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{8,30}$/,
+                        "A senha deve conter no letras maiúsculas, minúsculas e números"
+                    ),
+            });
+
+            await schema.validate(data, {
+                abortEarly: false,
+            });
+
+            // Success validation
+        } catch(err) {
+            if (err instanceof Yup.ValidationError) {
+                // Validation failed
+                // console.log(err.inner);
+                const validationErrors = getValidationErrors(err);
+
+                formRef.current?.setErrors(validationErrors);
+
+                // Alert.alert(
+                //     "Erro na autenticação",
+                //     "Ocorreu um erro ao fazer login, cheque as credenciais"
+                // );
+
+                return;
+            }
+        }
+        // console.log(data);
     }, []);
 
     return(
