@@ -1,33 +1,12 @@
 import React from 'react';
-import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import SignIn from '../pages/SignIn';
-import SignUp from '../pages/SignUp';
-import InitialScreen from '../pages/InitialScreen';
+import AuthRoutes from './auth.routes';
+import AppRoutes from './app.routes';
 
-const Auth = createStackNavigator();
+const Routes: React.FC = () => {
+    // Context API
 
-const AuthRoutes: React.FC = () => {
+    return <AppRoutes />;
+};
 
-    return (
-        <Auth.Navigator 
-            screenOptions={{
-                headerShown: false,
-                cardStyle: {
-                    backgroundColor: '#fdfdfd'
-                },
-                gestureDirection: "horizontal",
-                gestureEnabled: false,
-                cardStyleInterpolator:
-                  CardStyleInterpolators.forHorizontalIOS,
-            }}
-        >
-            <Auth.Screen name="InitialScreen" component={InitialScreen} />
-            <Auth.Screen name="SignIn" component={SignIn} />
-            <Auth.Screen name="SignUp" component={SignUp} />
-        </Auth.Navigator>
-    );
-}
-
-export default AuthRoutes;
+export default Routes;
