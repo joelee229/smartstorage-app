@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import Constants from 'expo-constants';
 
 const styles = StyleSheet.create({
     container: {
@@ -8,7 +9,8 @@ const styles = StyleSheet.create({
     header: {
         justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: 8
+        paddingTop: Constants.statusBarHeight,
+        paddingBottom: 8
     },
 
     item: {
