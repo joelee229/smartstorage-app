@@ -7,12 +7,13 @@ import { Container, ButtonText } from './styles';
 interface ButtonProps extends TouchableOpacityProps {
     children: string;
     filled?: boolean;
+    color?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({children, filled = false, ...rest}) => {
+const Button: React.FC<ButtonProps> = ({children, filled = false, color='',...rest}) => {
 
     return (
-        <Container {...rest} filled={filled}>
+        <Container {...rest} filled={filled} color={color}>
             <ButtonText filled={filled}>
                 {children}
             </ButtonText>

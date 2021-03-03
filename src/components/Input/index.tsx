@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useImperativeHandle, forwardRef, useState, useCallback } from 'react';
 // Propriedades de um TextInput do react-native
-import { TextInputProps } from 'react-native';
+import { TextInputProps, View } from 'react-native';
 import { useField } from '@unform/core';
 
 import { Container, TextInput, Label } from './styles';

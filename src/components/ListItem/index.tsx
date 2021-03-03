@@ -4,6 +4,7 @@ import { FontAwesome5 as Icon } from '@expo/vector-icons';
 
 
 import { Container, Title, Text, ChangeContainer, Button } from './styles';
+// TODO: Ícone X e sem a val
 
 interface ItemProps {
     colors: string[];

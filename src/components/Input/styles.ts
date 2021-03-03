@@ -6,7 +6,7 @@ interface ContainerProps {
 }
 
 export const Container = styled.View<ContainerProps>`
-    width: 100%;
+
     height: 54px;
     border-width: 1px;
     border-color: rgba(0, 0, 0, 0.15);

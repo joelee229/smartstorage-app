@@ -64,7 +64,7 @@ const SignIn: React.FC = () => {
         <>
             <KeyboardAvoidingView 
                 style={{ flex: 1 }} 
-                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 enabled
             >
                 {/* keyboardShoulPersistTaps significa se o teclado deve ficar ao clicar fora dele */}
@@ -97,7 +97,7 @@ const SignIn: React.FC = () => {
                                 keyboardType="email-address"
                                 returnKeyType="next"
                                 onSubmitEditing={() => {
-
+                                    passwordRef.current?.focus()
                                 }}
                             />
                             

@@ -4,29 +4,13 @@ import { RectButton } from 'react-native-gesture-handler';
 
 interface ContainerProps {
     filled: boolean;
+    color: string;
 }
 
-// export const Container = styled(RectButton)<ContainerProps>`
-//     width: 100%;
-//     height: 60px;
-//     background: #FABE4D;
-//     border-radius: 16px;
-//     border-width: 2px;
-//     border-color: #F00;
+interface TextProps {
+    filled: boolean;
+}
 
-//     justify-content: center;
-//     align-items: center;
-//     margin-top: 16px;
-
-//     ${(props) => 
-//         props.filled &&
-//         css`
-//             border-width: 2px;
-//             border-color: #F00;
-//             background: white;
-//         `
-//     }
-// `;
 export const Container = styled.TouchableOpacity<ContainerProps>`
     width: 100%;
     height: 60px;
@@ -45,9 +29,17 @@ export const Container = styled.TouchableOpacity<ContainerProps>`
             background: white;
         `
     }
+
+    ${(props) => 
+        props.color &&
+        css`
+            background: ${props.color};
+            border-color: ${props.color};
+        `
+    }
 `;
 
-export const ButtonText = styled.Text<ContainerProps>`
+export const ButtonText = styled.Text<TextProps>`
     font-family: 'Ubuntu_700Bold';
     color: white;
     font-size: 20px;

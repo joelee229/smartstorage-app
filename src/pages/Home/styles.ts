@@ -92,5 +92,17 @@ export const Body = styled.View`
     height: 54%;
 `;
 
-export const AddButton = styled.TouchableOpacity``;
+export const AddButton = styled.TouchableOpacity`
+    position: absolute;
+    top: ${Constants.statusBarHeight + 72}px;
+    right: 8px;
+
+    background: #FF5C38;
+    width: 70px;
+    height: 70px;
+    border-radius: 35px;
+
+    justify-content: center;
+    align-items: center;
+`;
 

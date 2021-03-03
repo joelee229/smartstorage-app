@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StatusBar, ScrollView, KeyboardAvoidingView, Platform, View, TouchableOpacity } from 'react-native';
 import { FontAwesome5 as Icon } from '@expo/vector-icons';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 
 import Back from '../../assets/backImage.jpg';
 
@@ -22,8 +23,32 @@ import {
     Head 
 } from './styles';
 import ListItem from '../../components/ListItem';
+import AddItem from '../AddItem';
 
-const Home: React.FC = (props) => {
+const Stack = createStackNavigator();
+
+const HomeRoutes: React.FC = () => {
+
+    return(
+        <Stack.Navigator
+            screenOptions={{
+                headerShown: false,
+                cardStyle: {
+                    backgroundColor: '#fdfdfd'
+                },
+                gestureDirection: "horizontal",
+                gestureEnabled: false,
+                cardStyleInterpolator:
+                CardStyleInterpolators.forHorizontalIOS,
+            }}
+        >
+            <Stack.Screen name="Home"  component={Home}/>
+            <Stack.Screen name="AddItem"  component={AddItem}/>
+        </Stack.Navigator>
+    );
+};
+
+const Home: React.FC = () => {
     const navigation = useNavigation();
     // TODO: Botão escondido que só vai aparecer durante a edição das qtds dos alimentos
     // '' Quando tocado executa um requisição de atualização do estado(alimentos) enviando como corpo
@@ -65,8 +90,8 @@ const Home: React.FC = (props) => {
 
                 
                 <Body>
-                    <ScrollView style={{ flex:1, paddingHorizontal: 28 }}>
-                        <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1 }}>
+                    <ScrollView style={{ flex:1, paddingHorizontal: 24 }}>
+                        <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, marginBottom: 8 }}>
                             <T2>Recentes</T2>
                             <TouchableOpacity>
                                 <Text>Ver mais</Text>
@@ -107,7 +132,7 @@ const Home: React.FC = (props) => {
                             /> 
                         </ScrollView>
                         
-                        <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1 }}>
+                        <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, marginBottom: 8 }}>
                             <T3>Preste a vencer</T3>
                             <TouchableOpacity>
                                 <Text>Ver mais</Text>
@@ -128,7 +153,7 @@ const Home: React.FC = (props) => {
                             /> 
                         </ScrollView>
                         
-                        <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1 }}>
+                        <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, marginBottom: 8 }}>
                             <T3>Listas personalizadas</T3>
                             <TouchableOpacity>
                                 <Text>Ver mais</Text>
@@ -150,9 +175,17 @@ const Home: React.FC = (props) => {
                         </ScrollView>
                     </ScrollView>
                 </Body>
+
+                <AddButton onPress={() => navigation.navigate('AddItem')}>
+                    <Icon 
+                        name="plus"
+                        size={40}
+                        color="white"
+                    />
+                </AddButton>
             {/* </KeyboardAvoidingView> */}
         </Container>
     );
 };
 
-export default Home;
+export default HomeRoutes;
