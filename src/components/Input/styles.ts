@@ -6,7 +6,7 @@ interface ContainerProps {
 }
 
 export const Container = styled.View<ContainerProps>`
-
+    width: 100%;
     height: 54px;
     border-width: 1px;
     border-color: rgba(0, 0, 0, 0.15);
@@ -36,4 +36,5 @@ export const TextInput = styled.TextInput`
     color: #666666;
     font-size: 16px;
     font-family: 'Roboto_400Regular';
+    padding: 12px 0;
 `;

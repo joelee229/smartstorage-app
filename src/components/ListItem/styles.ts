@@ -28,8 +28,8 @@ export const Text = styled.Text`
 export const Button = styled.TouchableOpacity`
     background: black;
     border-radius: 16px;
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     justify-content: center;
     align-items: center;
 `;

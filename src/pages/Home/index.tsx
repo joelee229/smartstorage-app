@@ -90,7 +90,7 @@ const Home: React.FC = () => {
 
                 
                 <Body>
-                    <ScrollView style={{ flex:1, paddingHorizontal: 24 }}>
+                    <ScrollView style={{ flex:1, paddingHorizontal: 16 }}>
                         <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, marginBottom: 8 }}>
                             <T2>Recentes</T2>
                             <TouchableOpacity>

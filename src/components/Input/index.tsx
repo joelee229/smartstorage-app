@@ -19,7 +19,7 @@ interface InputValueReference {
 }
 
 interface InputRef {
-    focus(): void
+    focus(): void;
 }
 
 // React.ForwardRefRenderFunction => É o único tipo de function que retorna o ref 
@@ -39,7 +39,7 @@ const Input: React.ForwardRefRenderFunction<InputRef ,InputProps> = ({label, nam
     useImperativeHandle(ref, () => ({
         focus() {
             // Realiza o focus nesse input em específico
-            inputElementRef.current.focus();
+            inputElementRef.current?.focus();
         }
     }));
 

@@ -7,6 +7,7 @@ const Routes: React.FC = () => {
     // Context API
 
     return <AppRoutes />;
+    // return <AuthRoutes />;
 };
 
 export default Routes;
