@@ -10,7 +10,7 @@ interface ItemProps {
     type?: string;
     colors: string[];
     title: string;
-    text: string;
+    text?: string;
     qtd: number;
 }
 
@@ -25,11 +25,9 @@ const ListItem: React.FC<ItemProps> = ({colors, title, text, qtd, type=''}) => {
             let res = num + 1;
             setNum(res);
             // setTimeout(() => console.log(num, res), 1000);
-            console.log(num);
         } else {
             let res = num - 1;
             setNum(res);
-            console.log(num);
         }
     }
 
@@ -51,7 +49,7 @@ const ListItem: React.FC<ItemProps> = ({colors, title, text, qtd, type=''}) => {
 
             <View style={{ flex: 1 }}>
                 <Title>{title}</Title>
-                <Text>{text}</Text>
+                {text && <Text>{text}</Text>}
             </View>
 
             <View style={{ flexDirection: 'row', alignItems: 'center' }} >

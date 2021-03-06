@@ -5,9 +5,7 @@ import { Container } from './styles';
 const List: React.FC = () => {
 
     return(
-        <Container>
-            
-        </Container>
+        <Container></Container>
     );
 };
 

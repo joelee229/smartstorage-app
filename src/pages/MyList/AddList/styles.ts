@@ -1,5 +1,5 @@
-import Constants from 'expo-constants';
 import styled from 'styled-components/native';
+import Constants from 'expo-constants';
 
 export const Container = styled.View`
     flex: 1;
@@ -22,16 +22,6 @@ export const Body = styled.View`
     padding: 0 24px;
 `;
 
-export const PickerButton = styled.TouchableOpacity`
-    height: 54px;
-    border-width: 1px;
-    border-color: rgba(0, 0, 0, 0.15);
-    border-radius: 10px;
-    justify-content: center;
-    padding: 0 16px;
-    margin-top: 8px;
-`;
-
 export const Text = styled.Text`
     color: #666666;
     font-size: 16px;
@@ -45,7 +35,6 @@ export const Label = styled.Text`
 `;
 
 export const Select = styled.View`
-    flex: 1;
     height: 54px;
     border-width: 1px;
     border-color: rgba(0, 0, 0, 0.15);

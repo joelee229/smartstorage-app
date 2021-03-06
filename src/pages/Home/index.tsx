@@ -176,7 +176,7 @@ const Home: React.FC = () => {
                     </ScrollView>
                 </Body>
 
-                <AddButton onPress={() => navigation.navigate('AddItem')}>
+                <AddButton onPress={() => navigation.navigate('AddItem', {isList: false})}>
                     <Icon 
                         name="plus"
                         size={40}
