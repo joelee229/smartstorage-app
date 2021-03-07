@@ -97,7 +97,7 @@ const AddList: React.FC = () => {
                             {/* Cód de barra */}
 
                             <Button color="#008DF4">
-                                Adicionar
+                                Criar
                             </Button>
                         </Form>
                     </Body>

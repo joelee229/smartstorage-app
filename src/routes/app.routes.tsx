@@ -26,21 +26,22 @@ const AppRoutes: React.FC = () => {
                 name="Home" 
                 component={Home}
                 options={{
-                    drawerIcon: ({ size }) => (
+                    drawerIcon: ({ size, color }) => (
                         <Icon 
                             name="home"
                             size={size}
                             color="#979797"
                         />
                     ),
-                    drawerLabel: "Início"
+                    drawerLabel: "Início",
+                    
                 }}
             />
             <App.Screen 
                 name="MyList" 
                 component={MyList}
                 options={{
-                    drawerIcon: ({ size }) => (
+                    drawerIcon: ({ size, color }) => (
                         <IconF
                             name="list"
                             size={size}
@@ -54,7 +55,7 @@ const AppRoutes: React.FC = () => {
                 name="ShopList" 
                 component={ShopList}
                 options={{
-                    drawerIcon: ({ size }) => (
+                    drawerIcon: ({ size, color }) => (
                         <Icon
                             name="list"
                             size={size}
@@ -68,7 +69,7 @@ const AppRoutes: React.FC = () => {
                 name="Terms" 
                 component={Terms}
                 options={{
-                    drawerIcon: ({ size }) => (
+                    drawerIcon: ({ size, color }) => (
                         <Icon 
                             name="edit"
                             size={size}
@@ -82,15 +83,16 @@ const AppRoutes: React.FC = () => {
                 name="Profile" 
                 component={Profile}
                 options={{
-                    drawerIcon: ({ size }) => (
+                    drawerIcon: ({ size, color }) => (
                         <IconF 
                             name="user-circle"
                             size={size}
                             color="#979797"
                         />
                     ),
-                    drawerLabel: "Perfil"
+                    drawerLabel: "Perfil",                 
                 }}
+                
             />
         </App.Navigator>
     );

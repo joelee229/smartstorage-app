@@ -25,7 +25,7 @@ export const T1 = styled.Text`
     font-family: 'Ubuntu_700Bold';
     font-size: 38px;
     color: white;
-    padding: 8px 18px;
+    padding: 8px 12px;
 `;
 
 export const InputContainer = styled.View`
@@ -69,7 +69,7 @@ export const Body = styled.View`
 
 export const AddButton = styled.TouchableOpacity`
     position: absolute;
-    top: ${Constants.statusBarHeight + 56}px;
+    top: ${Constants.statusBarHeight + 72}px;
     right: 8px;
 
     background: #FF5C38;

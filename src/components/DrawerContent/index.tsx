@@ -17,12 +17,14 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
                 />
             </View>
 
-            <DrawerContentScrollView {...props}>
+            <DrawerContentScrollView {...props} >
                 {/* Body */}
                 <DrawerItemList 
                     {...props} 
                     itemStyle={styles.item}
                     labelStyle={styles.itemLabel}
+                    activeTintColor="black"
+                    inactiveTintColor="green"
                 />
 
                 <DrawerItem 

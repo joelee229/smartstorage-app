@@ -6,7 +6,7 @@ import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/
 
 import { Container, ImageBackground, Head, Header, Button, InputContainer, TextInput, T1, Body, AddButton } from './styles';
 import Back from '../../assets/backImage.jpg';
-import ListItem from '../../components/ListItem';
+import AddItem from '../AddItem';
 import Item from './Item';
 import AddList from './AddList';
 import List from './List';
@@ -28,8 +28,9 @@ const ShopRoute: React.FC = () => {
                 CardStyleInterpolators.forHorizontalIOS,
             }}
         >
-            <Stack.Screen name="ShopList" component={MyList} />
+            <Stack.Screen name="MyList" component={MyList} />
             <Stack.Screen name="AddList" component={AddList} />
+            <Stack.Screen name="AddItem" component={AddItem} />
             <Stack.Screen name="List" component={List} />
         </Stack.Navigator>
     );
@@ -46,13 +47,13 @@ const MyList: React.FC = () => {
                     <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
                         <Icon 
                             name="bars"
-                            size={24}
+                            size={30}
                             color="#FFFFFF"
                         />
                     </TouchableOpacity>
                 </Head>
                 <Header>
-                    <T1>Minha(s) lista(s)</T1>
+                    <T1>Minhas listas</T1>
                 </Header>
             </ImageBackground>
 
@@ -74,7 +75,6 @@ const MyList: React.FC = () => {
                     <Item
                         colors={['#FFE500', '#FFF493']}
                         title="Dispensa"
-                        navigation={navigation}
                     />
                 </ScrollView>
             </Body>

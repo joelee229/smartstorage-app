@@ -43,7 +43,7 @@ const ShopList: React.FC = (props) => {
                     <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
                         <Icon 
                             name="bars"
-                            size={24}
+                            size={30}
                             color="#FFFFFF"
                         />
                     </TouchableOpacity>

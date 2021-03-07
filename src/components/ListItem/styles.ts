@@ -15,7 +15,7 @@ export const Container = styled(LinearGradient)`
 
 export const Title = styled.Text`
     font-family: 'Ubuntu_700Bold';
-    font-size: 24px;
+    font-size: 22px;
     color: black;
 `;
 

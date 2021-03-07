@@ -66,7 +66,7 @@ const Home: React.FC = () => {
                         <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
                             <Icon 
                                 name="bars"
-                                size={24}
+                                size={30}
                                 color="#FFFFFF"
                             />
                         </TouchableOpacity>

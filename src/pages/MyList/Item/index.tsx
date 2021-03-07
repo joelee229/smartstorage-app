@@ -2,20 +2,20 @@ import React, { useCallback } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { FontAwesome5 as Icon } from '@expo/vector-icons';
 import { StackNavigationOptions } from '@react-navigation/stack';
-// import { NavigationProp, Navigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import { Container, Title, Text, Button } from './styles';
 
 interface ItemProps {
     colors: string[];
     title: string;
-    navigation: any;
 }
 
-const Item: React.FC<ItemProps> = ({ colors, title, navigation }) => {
+const Item: React.FC<ItemProps> = ({ colors, title }) => {
+    const navigation = useNavigation();
 
     const handleButtonPress = useCallback(() => {
-        navigation.navigate('List');
+        navigation.navigate('List', { title });
     }, []);
 
     return(
