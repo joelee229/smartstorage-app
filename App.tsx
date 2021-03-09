@@ -1,10 +1,11 @@
 import React from 'react';
-// import { StatusBar } from 'expo-status-bar';
-import { View, Text, StatusBar } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
 import { Roboto_400Regular, Roboto_500Medium, useFonts} from '@expo-google-fonts/roboto';
+import { NavigationContainer } from '@react-navigation/native';
 import { Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
+import { View, Text, StatusBar } from 'react-native';
 
+import Loading from './src/components/Loading';
+import AppProvider from './src/hooks/';
 import Routes from './src/routes';
 
 export default function App() {
@@ -16,13 +17,15 @@ export default function App() {
 
   if(!fontsLoaded){
     // TODO: Component de loading
-    return <Text>Loading...</Text>
+    return <Loading />
   }
 
   return (
     <NavigationContainer>
       <StatusBar barStyle="dark-content" backgroundColor="#fdfdfd" />
-      <Routes />
+      <AppProvider>
+        <Routes />
+      </AppProvider>
     </NavigationContainer>
   );
 }

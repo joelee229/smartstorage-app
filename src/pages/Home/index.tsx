@@ -51,6 +51,7 @@ const HomeRoutes: React.FC = () => {
 const Home: React.FC = () => {
     const navigation = useNavigation();
     // TODO: Botão escondido que só vai aparecer durante a edição das qtds dos alimentos
+    // TODO: Trocar as imagens pelo tamanho correto
     // '' Quando tocado executa um requisição de atualização do estado(alimentos) enviando como corpo
     // O estado vai ser alterado com o(s) número(s) de mudança e seu index
 
@@ -59,6 +60,7 @@ const Home: React.FC = () => {
 
     return(
         <Container>
+            {/* TODO Talvez mudar para sólido */}
             <StatusBar translucent backgroundColor="transparent" barStyle="light-content"/>
             {/* <KeyboardAvoidingView enabled={false} style={{flex: 1}} behavior={Platform.OS === "ios" ? "padding" : undefined } > */}
                 <ImageBackground source={Back} >

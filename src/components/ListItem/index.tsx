@@ -16,11 +16,21 @@ interface ItemProps {
 
 const ListItem: React.FC<ItemProps> = ({colors, title, text, qtd, type=''}) => {
     const [num, setNum] = useState<number>(qtd);
-    let val = num;
 
     // Note: useCallback gera uma função que nunca se reenderiza novamente.
     // Então tome cuidado com funções que precisam altera um estado continuamente
-    const handleNumberChange = (type: string) => {
+    // const handleNumberChange = (type: string) => {
+    //     if(type === "+"){
+    //         let res = num + 1;
+    //         setNum(res);
+    //         // setTimeout(() => console.log(num, res), 1000);
+    //     } else {
+    //         let res = num - 1;
+    //         setNum(res);
+    //     }
+    // }
+
+    const handleNumberChange = useCallback((type: string) => {
         if(type === "+"){
             let res = num + 1;
             setNum(res);
@@ -29,7 +39,7 @@ const ListItem: React.FC<ItemProps> = ({colors, title, text, qtd, type=''}) => {
             let res = num - 1;
             setNum(res);
         }
-    }
+    }, [num]);
 
     return(
         <Container 

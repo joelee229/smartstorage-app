@@ -9,11 +9,11 @@ import { Form } from '@unform/mobile';
 import * as Yup from 'yup';
 
 import { Container, Head, Title, Body, PickerButton, Text, Label, Select } from './styles';
-import getValidationErrors from '../../utils/getValidationErrors';
-import Loading from '../../components/Loading';
-import Button from '../../components/Button';
-import Input from '../../components/Input';
-import api from '../../services/api';
+import getValidationErrors from '../../../utils/getValidationErrors';
+import Loading from '../../../components/Loading';
+import Button from '../../../components/Button';
+import Input from '../../../components/Input';
+import api from '../../../services/api';
 
 interface ItemProps {
     name: string;
@@ -22,11 +22,9 @@ interface ItemProps {
 }
 
 
-const AddItem: React.FC = () => {
+const AddShopItem: React.FC = () => {
     const [selectedType, setSelectedType] = useState<string>();
     const [loading, setLoading] = useState(false);
-    const [date, setDate] = useState<Date>(new Date());
-    const [show, setShow] = useState<boolean>(false);
     const formRef = useRef<FormHandles>(null);
 
     const navigation = useNavigation();
@@ -35,7 +33,6 @@ const AddItem: React.FC = () => {
     const handleSubmit = useCallback(async (data: ItemProps) => {
         // TODO: Pegar o id ou title da lista nos parâmetros da rota
         try {
-            
             formRef.current?.setErrors({});
 
             const schema = Yup.object().shape({
@@ -58,7 +55,6 @@ const AddItem: React.FC = () => {
             // await api.post('/item/create', {
             //     ...data,
             //     type: selectedType,
-            //     validity: date,
             // });
 
             Alert.alert(
@@ -84,14 +80,8 @@ const AddItem: React.FC = () => {
             setLoading(false);
         }
 
-    }, [navigation, date, selectedType]);
+    }, [navigation, selectedType]);
 
-    const handleDatePickerChange = useCallback((e, selectedDate) => {
-        setShow(Platform.OS === 'ios');
-        if(selectedDate){
-            setDate(selectedDate);
-        }
-    }, []);
 
     const handleSelectChange = useCallback((item, i) => {
         setSelectedType(item);
@@ -126,9 +116,8 @@ const AddItem: React.FC = () => {
                                 label="Nome do item"
                                 name="name"
                                 placeholder="Ex: Arroz 5kg"
-                                keyboardType="email-address"
+                                keyboardType="default"
                                 autoCapitalize="words"
-                                autoCorrect={false}
                             />
 
                             <View style={{ flexDirection: 'row' }}>
@@ -144,47 +133,34 @@ const AddItem: React.FC = () => {
                                 <View style={{marginHorizontal: 8}}></View>
 
                                 <View style={{ flex: 1 }}>
-                                    <Label>Validade</Label>
-                                    <PickerButton onPress={() => setShow(true)}>
-                                        <Text>{date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()}</Text>
-                                    </PickerButton>
-                                </View>
-                            </View>
-
-                            <View style={{ flexDirection: 'row' }}>
-                                <View style={{ flex: 1 }}>
                                     <Input 
                                         label="Marca/Empresa"
                                         name="brand"
                                         placeholder="Ex: Tupiniquim"
-                                        keyboardType="email-address"
+                                        keyboardType="default"
                                         autoCapitalize="words"
-                                        autoCorrect={false}
                                     />
                                 </View>
-
-                                <View style={{marginHorizontal: 8}}></View>
-
-                                {/* Select */}
-                                <View style={{ flex: 1 }}>
-                                    <Label>Tipo</Label>
-                                    <Select >
-                                        <Picker
-                                            selectedValue={selectedType}
-                                            onValueChange={handleSelectChange}
-                                            style={{ flex: 1 }}
-                                        >
-                                            <Picker.Item label="Óleos e gorduras" value="Óleos e gorduras" />
-                                            <Picker.Item label="Açúcares e Doces" value="Açúcares e Doces" />
-                                            <Picker.Item label="Leite, Queijo, Íorgute" value="Leite, Queijo, Íorgute" />
-                                            <Picker.Item label="Carnes e Ovos" value="Carnes e Ovos" />
-                                            <Picker.Item label="Feijões e Oleaginosas" value="Feijões e Oleaginosas" />
-                                            <Picker.Item label="Legumes e Verduras" value="Legumes e Verduras" />
-                                            <Picker.Item label="Frutas" value="Frutas" />
-                                            <Picker.Item label="Arroz, Pão, Massa, Mandioca" value="Arroz, Pão, Massa, Mandioca" />
-                                        </Picker>
-                                    </Select>
-                                </View>
+                            </View>
+                            {/* Select */}
+                            <View >
+                                <Label>Tipo</Label>
+                                <Select >
+                                    <Picker
+                                        selectedValue={selectedType}
+                                        onValueChange={handleSelectChange}
+                                        style={{ flex: 1 }}
+                                    >
+                                        <Picker.Item label="Óleos e gorduras" value="Óleos e gorduras" />
+                                        <Picker.Item label="Açúcares e Doces" value="Açúcares e Doces" />
+                                        <Picker.Item label="Leite, Queijo, Íorgute" value="Leite, Queijo, Íorgute" />
+                                        <Picker.Item label="Carnes e Ovos" value="Carnes e Ovos" />
+                                        <Picker.Item label="Feijões e Oleaginosas" value="Feijões e Oleaginosas" />
+                                        <Picker.Item label="Legumes e Verduras" value="Legumes e Verduras" />
+                                        <Picker.Item label="Frutas" value="Frutas" />
+                                        <Picker.Item label="Arroz, Pão, Massa, Mandioca" value="Arroz, Pão, Massa, Mandioca" />
+                                    </Picker>
+                                </Select>
                             </View>
 
                             {/* Cód de barra */}
@@ -194,19 +170,9 @@ const AddItem: React.FC = () => {
                             </Button>
                         </Form>
                     </Body>
-                    
-                    {show && 
-                        <DateTimePicker
-                            testID="DatePicker"
-                            value={date}
-                            mode='date'
-                            display='default'
-                            onChange={handleDatePickerChange}
-                        />
-                    }
             </Container>
         </KeyboardAvoidingView>
     );
 };
 
-export default AddItem;
+export default AddShopItem;

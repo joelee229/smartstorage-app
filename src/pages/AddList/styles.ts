@@ -1,5 +1,5 @@
-import styled from 'styled-components/native';
 import Constants from 'expo-constants';
+import styled from 'styled-components/native';
 
 export const Container = styled.View`
     flex: 1;
@@ -20,6 +20,16 @@ export const Title = styled.Text`
 export const Body = styled.View`
     flex: 1;
     padding: 0 24px;
+`;
+
+export const PickerButton = styled.TouchableOpacity`
+    height: 54px;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    justify-content: center;
+    padding: 0 16px;
+    margin-top: 8px;
 `;
 
 export const Text = styled.Text`

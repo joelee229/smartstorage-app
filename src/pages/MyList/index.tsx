@@ -8,7 +8,7 @@ import { Container, ImageBackground, Head, Header, Button, InputContainer, TextI
 import Back from '../../assets/backImage.jpg';
 import AddItem from '../AddItem';
 import Item from './Item';
-import AddList from './AddList';
+import AddList from '../AddList';
 import List from './List';
 
 const Stack = createStackNavigator();

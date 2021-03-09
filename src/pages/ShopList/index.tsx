@@ -7,7 +7,7 @@ import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/
 import { Container, ImageBackground, Head, Header, Button, InputContainer, TextInput, T1, Body, AddButton } from './styles';
 import Back from '../../assets/backImage.jpg';
 import ListItem from '../../components/ListItem';
-import AddItem from '../AddItem';
+import AddShopItem from './AddShopItem';
 
 const Stack = createStackNavigator();
 
@@ -27,7 +27,7 @@ const ShopRoute: React.FC = () => {
             }}
         >
             <Stack.Screen name="ShopList" component={ShopList} />
-            <Stack.Screen name="AddItem" component={AddItem} />
+            <Stack.Screen name="AddShopItem" component={AddShopItem} />
         </Stack.Navigator>
     );
 };
@@ -78,7 +78,7 @@ const ShopList: React.FC = (props) => {
                 </ScrollView>
             </Body>
 
-            <AddButton onPress={() => navigation.navigate('AddItem', {isList: true})}>
+            <AddButton onPress={() => navigation.navigate('AddShopItem')}>
                 <Icon 
                     name="plus"
                     size={40}

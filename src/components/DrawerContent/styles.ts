@@ -14,9 +14,9 @@ const styles = StyleSheet.create({
     },
 
     item: {
-        width: '100%',
-        marginLeft: 0,
-        paddingLeft: 16
+        // width: '100%',
+        marginLeft: 16,
+        // paddingLeft: 16
     },
 
     itemLabel: {

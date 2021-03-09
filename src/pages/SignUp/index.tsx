@@ -1,22 +1,32 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useState } from 'react';
+import { View, KeyboardAvoidingView, Platform, ScrollView, TextInput, Alert } from 'react-native';
 import { Feather as Icon, FontAwesome5 as FaIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { View, KeyboardAvoidingView, Platform, ScrollView, TextInput, Alert } from 'react-native';
-import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
+import { Form } from '@unform/mobile';
 import * as Yup from 'yup';
 
-import { Container, Title, Button, BackButton } from './styles';
-import Input from '../../components/Input';
 import getValidationErrors from '../../utils/getValidationErrors';
+import { Container, Title, Button, BackButton } from './styles';
+import Loading from '../../components/Loading';
+import { useAuth } from '../../hooks/auth';
+import Input from '../../components/Input';
+import api from '../../services/api';
+
+interface SignUpProps {
+    name: string;
+    email:string;
+    password: string;
+}
 
 const SignUp: React.FC = () => {
+    const [loading, setLoading] = useState<boolean>(false);
     const formRef = useRef<FormHandles>(null);
     const emailInputRef = useRef<TextInput>(null);
     const passwordInputRef = useRef<TextInput>(null);
     const navigation = useNavigation();
 
-    const handleSignUp = useCallback(async (data: object) => {
+    const handleSignUp = useCallback(async (data: SignUpProps) => {
         try {
             formRef.current?.setErrors({});
             // Criar um schema para o data que está vindo
@@ -39,6 +49,15 @@ const SignUp: React.FC = () => {
             });
 
             // Success validation
+            setLoading(true);
+            // await api.post('/signUp', data);
+
+            Alert.alert(
+                'Cadastro realizado com sucesso',
+                'Você já pode fazer login na aplicação.'
+            );
+
+            navigation.goBack()
         } catch(err) {
             if (err instanceof Yup.ValidationError) {
                 // Validation failed
@@ -47,16 +66,22 @@ const SignUp: React.FC = () => {
 
                 formRef.current?.setErrors(validationErrors);
 
-                // Alert.alert(
-                //     "Erro na autenticação",
-                //     "Ocorreu um erro ao fazer login, cheque as credenciais"
-                // );
-
                 return;
             }
+
+            Alert.alert(
+                "Erro na autenticação",
+                "Ocorreu um erro ao fazer o cadastro, cheque as credenciais"
+            );
+        } finally {
+            setLoading(false);
         }
         // console.log(data);
-    }, []);
+    }, [navigation]);
+
+    if(loading){
+        return <Loading />
+    }
 
 
     return(
