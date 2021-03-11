@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 import { Dimensions } from 'react-native';
 import Constants from 'expo-constants';
+import * as Animatable from 'react-native-animatable';
 
 
 export const Container = styled.View`
@@ -41,6 +42,7 @@ export const T3 = styled.Text`
     font-family: 'Ubuntu_700Bold';
     font-size: 20px;
     color: #3A3A3A;
+    margin-top: 8px;
     flex: 1;
 `;
 
@@ -104,5 +106,34 @@ export const AddButton = styled.TouchableOpacity`
 
     justify-content: center;
     align-items: center;
+`;
+
+export const HiddenButtonContainer = styled(Animatable.View)`
+    position: absolute;
+    bottom: 54%;
+    left: 0;
+
+    padding: 8px 8px;
+
+    flex-direction: row;
+    align-items: center;
+    background: rgba(0,0,0, 0.45);
+    border-top-right-radius: 16px;
+`;
+
+export const HiddenButton = styled.TouchableOpacity`
+    background: #FABE4D;
+    width: 100px;
+    height: 56px;
+    border-radius: 12px;
+
+    justify-content: center;
+    align-items: center;
+`;
+
+export const HiddenButtonText = styled.Text`
+    font-family: 'Roboto_500Medium';
+    font-size: 18px;
+    color: white;
 `;
 

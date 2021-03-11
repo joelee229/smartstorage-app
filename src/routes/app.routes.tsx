@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Feather as Icon, FontAwesome5 as IconF } from '@expo/vector-icons';
 
@@ -19,7 +20,7 @@ const AppRoutes: React.FC = () => {
             sceneContainerStyle={{
                 backgroundColor: '#fdfdfd'
             }}
-            drawerContentOptions={{ activeBackgroundColor: "#F2F2F2", activeTintColor: '#000000'}}
+            drawerContentOptions={{ activeBackgroundColor: "#ECECEC" }}
             drawerContent={props => <DrawerContent {...props} />}
         >
             <App.Screen 
@@ -30,10 +31,17 @@ const AppRoutes: React.FC = () => {
                         <Icon 
                             name="home"
                             size={size}
-                            color="#979797"
+                            color={color}
                         />
                     ),
-                    drawerLabel: "Início",
+                    drawerLabel: ({ color }) => (
+                        <Text style={{
+                            color: color,
+                            fontFamily: 'Roboto_500Medium',
+                            fontSize: 18,
+                            marginLeft: -16
+                        }}>Início</Text>
+                    ),
                     
                 }}
             />
@@ -45,10 +53,17 @@ const AppRoutes: React.FC = () => {
                         <IconF
                             name="list"
                             size={size}
-                            color="#979797"
+                            color={color}
                         />
                     ),
-                    drawerLabel: "Minhas listas"
+                    drawerLabel: ({ color }) => (
+                        <Text style={{
+                            color: color,
+                            fontFamily: 'Roboto_500Medium',
+                            fontSize: 18,
+                            marginLeft: -16
+                        }}>Minhas listas</Text>
+                    ),
                 }}
             />
             <App.Screen 
@@ -59,10 +74,17 @@ const AppRoutes: React.FC = () => {
                         <Icon
                             name="list"
                             size={size}
-                            color="#979797"
+                            color={color}
                         />
                     ),
-                    drawerLabel: "Lista de compras"
+                    drawerLabel: ({ color }) => (
+                        <Text style={{
+                            color: color,
+                            fontFamily: 'Roboto_500Medium',
+                            fontSize: 18,
+                            marginLeft: -16
+                        }}>Lista de compras</Text>
+                    ),
                 }}
             />
             <App.Screen 
@@ -73,10 +95,17 @@ const AppRoutes: React.FC = () => {
                         <Icon 
                             name="edit"
                             size={size}
-                            color="#979797"
+                            color={color}
                         />
                     ),
-                    drawerLabel: "Termos e serviços"
+                    drawerLabel: ({ color }) => (
+                        <Text style={{
+                            color: color,
+                            fontFamily: 'Roboto_500Medium',
+                            fontSize: 18,
+                            marginLeft: -16
+                        }}>Termos e serviços</Text>
+                    ),
                 }}
             />
             <App.Screen 
@@ -87,10 +116,17 @@ const AppRoutes: React.FC = () => {
                         <IconF 
                             name="user-circle"
                             size={size}
-                            color="#979797"
+                            color={color}
                         />
                     ),
-                    drawerLabel: "Perfil",                 
+                    drawerLabel: ({ color }) => (
+                        <Text style={{
+                            color: color,
+                            fontFamily: 'Roboto_500Medium',
+                            fontSize: 18,
+                            marginLeft: -16
+                        }}>Perfil</Text>
+                    ),                 
                 }}
                 
             />

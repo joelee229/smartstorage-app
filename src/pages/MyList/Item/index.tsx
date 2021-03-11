@@ -36,7 +36,7 @@ const Item: React.FC<ItemProps> = ({ colors, title }) => {
                 <Title>{title}</Title>
             </View>
 
-            <TouchableOpacity onPress={handleButtonPress} style={{ marginRight: 8 }}>
+            <TouchableOpacity onPress={handleButtonPress} style={{ padding: 16 }}>
                 <Icon
                     name="arrow-right"
                     size={24}

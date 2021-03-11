@@ -6,7 +6,7 @@ interface Item {
 	color: string[];
 	validity?: string;
 	brand: string;
-	quantity: number;
+	qtd: number;
 };
 
 export default Item;

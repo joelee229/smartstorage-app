@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export const Container = styled(LinearGradient)`
-    width: 100%;
+    width: 324px;
     height: 72px;
     border-radius: 16px;
 
@@ -11,6 +11,7 @@ export const Container = styled(LinearGradient)`
     flex-direction: row;
     align-items: center;
     margin-bottom: 8px;
+    margin-right: 8px;
 `;
 
 export const Title = styled.Text`

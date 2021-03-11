@@ -1,5 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { StatusBar, ScrollView, KeyboardAvoidingView, Platform, View, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { 
+    StatusBar, 
+    ScrollView, 
+    KeyboardAvoidingView, 
+    Platform, 
+    View, 
+    TouchableOpacity,
+    FlatList
+} from 'react-native';
 import { FontAwesome5 as Icon } from '@expo/vector-icons';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
@@ -20,10 +28,16 @@ import {
     AddButton, 
     ImageBackground,
     Text,
-    Head 
+    Head,
+    HiddenButtonContainer,
+    HiddenButton,
+    HiddenButtonText
 } from './styles';
 import ListItem from '../../components/ListItem';
 import AddItem from '../AddItem';
+import { useAuth } from '../../hooks/auth';
+import Item from '../../utils/model/item';
+import List from '../../utils/model/list';
 
 const Stack = createStackNavigator();
 
@@ -49,14 +63,68 @@ const HomeRoutes: React.FC = () => {
 };
 
 const Home: React.FC = () => {
+    const { user } = useAuth();
     const navigation = useNavigation();
-    // TODO: Botão escondido que só vai aparecer durante a edição das qtds dos alimentos
-    // TODO: Trocar as imagens pelo tamanho correto
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [listState, setListState] = useState<Item[]>(user.lists[0].items);
+
+    // TODO: Talvez vai precisar de um state contendo esse array
+    
+    
     // '' Quando tocado executa um requisição de atualização do estado(alimentos) enviando como corpo
     // O estado vai ser alterado com o(s) número(s) de mudança e seu index
 
     // O estado criado pelo search tem que substituir os cards atuais
     // TODO: Nested ScrollView issue
+
+    const handleHiddenButtonCancel = useCallback(() => {
+        // arrayList = user.lists;
+        // setListState(user.lists[0].items);
+        
+        console.log("Lista do context",user.lists[0].items);
+        console.log("Lista do state",user.lists[0].items);
+        setIsEditing(false);
+    }, [listState, user]);
+
+    const handleHiddenButtonSubmit = useCallback(() => {
+        console.log(listState);
+
+        // TODO: Mandar esse array alterado para o context
+        // updateItem()
+    }, []);
+
+    const handleEditingChange = useCallback((itemId: string, newVal: number, listName: string) => {
+        if(!isEditing){
+            setIsEditing(true);
+        }
+
+        // arrayList.filter(list => list.title === listName)[0]
+        //     .items.filter(item => item.id === itemId)[0].qtd = newVal;
+
+        // Busca o item em específico no array
+        const changedItem = listState.find(item => item.id === itemId);
+
+        // Altera o atributo qtd como queremos
+        if(changedItem){
+            changedItem.qtd = newVal;
+        }
+
+        // Meio que copia e junta tudo em um novo array
+        const listItems = Object.assign([], listState, changedItem);
+
+        // Realoca esse novo array no state
+        setListState(listItems);
+
+    }, [isEditing, listState]);
+
+    const handleRenderItem = useCallback(({item}) => (
+        <ListItem
+            item={item}
+            onChange={handleEditingChange}
+            isEditing={isEditing}
+            listName="Default"
+        />
+    ), []);
 
     return(
         <Container>
@@ -99,40 +167,22 @@ const Home: React.FC = () => {
                                 <Text>Ver mais</Text>
                             </TouchableOpacity>
                         </View>
-                        <ScrollView 
+                        {/* 
+                            colors={['#FF3840', '#FF878C']}
+
+                            colors={['#FFAB41', '#FFCE90']}
+
+                            colors={['#FFE500', '#FFF493']}
+
+                            colors={['#71CB32', '#BCEA9D']}
+                         */}
+                        <FlatList
+                            data={listState}
+                            renderItem={handleRenderItem}
                             horizontal
-                            contentContainerStyle={{ flex: 1, paddingVertical: 8 }}
-                            nestedScrollEnabled = {true}
+                            contentContainerStyle={{ paddingVertical: 2 }}
                             scrollEnabled
-                        >
-                            <ListItem
-                                colors={['#FF3840', '#FF878C']}
-                                title="Macarrão"
-                                text="Val: 10/12/2021"
-                                qtd={5}
-                            />
-
-                            <ListItem
-                                colors={['#FFAB41', '#FFCE90']}
-                                title="Macarrão"
-                                text="Val: 10/12/2021"
-                                qtd={5}
-                            />
-
-                            <ListItem
-                                colors={['#FFE500', '#FFF493']}
-                                title="Macarrão"
-                                text="Val: 10/12/2021"
-                                qtd={5}
-                            />
-
-                            <ListItem
-                                colors={['#71CB32', '#BCEA9D']}
-                                title="Macarrão"
-                                text="Val: 10/12/2021"
-                                qtd={5}
-                            /> 
-                        </ScrollView>
+                        />
                         
                         <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, marginBottom: 8 }}>
                             <T3>Preste a vencer</T3>
@@ -141,19 +191,14 @@ const Home: React.FC = () => {
                             </TouchableOpacity>
                         </View>
 
-                        <ScrollView 
+                        {/* TODO: Criar diferentes array de itens dependendo do filtro */}
+                        <FlatList
+                            data={listState}
+                            renderItem={handleRenderItem}
                             horizontal
-                            contentContainerStyle={{ flex: 1, paddingVertical: 8 }}
-                            nestedScrollEnabled = {true}
+                            contentContainerStyle={{ paddingVertical: 2 }}
                             scrollEnabled
-                        >
-                            <ListItem
-                                colors={['#FFAB41', '#FFCE90']}
-                                title="Macarrão"
-                                text="Val: 10/12/2021"
-                                qtd={5}
-                            /> 
-                        </ScrollView>
+                        />
                         
                         <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, marginBottom: 8 }}>
                             <T3>Listas personalizadas</T3>
@@ -162,19 +207,13 @@ const Home: React.FC = () => {
                             </TouchableOpacity>
                         </View>
 
-                        <ScrollView 
+                        <FlatList
+                            data={listState}
+                            renderItem={handleRenderItem}
                             horizontal
-                            contentContainerStyle={{ flex: 1, paddingVertical: 8 }}
-                            nestedScrollEnabled = {true}
+                            contentContainerStyle={{ paddingVertical: 2 }}
                             scrollEnabled
-                        >
-                            <ListItem
-                                colors={['#71CB32', '#BCEA9D']}
-                                title="Macarrão"
-                                text="Val: 10/12/2021"
-                                qtd={5}
-                            /> 
-                        </ScrollView>
+                        />
                     </ScrollView>
                 </Body>
 
@@ -185,6 +224,19 @@ const Home: React.FC = () => {
                         color="white"
                     />
                 </AddButton>
+
+                {
+                    isEditing &&
+                    <HiddenButtonContainer animation="bounceInLeft" duration={200}>
+                        <HiddenButton onPress={handleHiddenButtonCancel} style={{ marginRight: 16 }}>
+                            <HiddenButtonText>Cancelar</HiddenButtonText>
+                        </HiddenButton>
+
+                        <HiddenButton onPress={handleHiddenButtonSubmit}>
+                            <HiddenButtonText>Enviar</HiddenButtonText>
+                        </HiddenButton>
+                    </HiddenButtonContainer>
+                }
             {/* </KeyboardAvoidingView> */}
         </Container>
     );

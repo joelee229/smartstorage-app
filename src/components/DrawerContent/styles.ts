@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingTop: Constants.statusBarHeight,
-        paddingBottom: 8
+        paddingHorizontal: 24
     },
 
     item: {
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     itemLabel: {
         color: '#979797',
         fontFamily: 'Roboto_500Medium',
-        fontSize: 16,
+        fontSize: 18,
         marginLeft: -16
     }
 });

@@ -14,17 +14,23 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
             <View style={styles.header}>
                 <Image
                     source={Logo}
+                    resizeMode='contain'
+                    style={{ width: '100%' }}
                 />
             </View>
 
-            <DrawerContentScrollView {...props} >
+            <DrawerContentScrollView 
+                {...props}
+                contentContainerStyle={{ paddingTop: 0, marginVertical: 0 }}
+                scrollEnabled
+            >
                 {/* Body */}
                 <DrawerItemList 
                     {...props} 
                     itemStyle={styles.item}
                     labelStyle={styles.itemLabel}
                     activeTintColor="black"
-                    inactiveTintColor="green"
+                    inactiveTintColor="#979797"
                 />
 
                 <DrawerItem 

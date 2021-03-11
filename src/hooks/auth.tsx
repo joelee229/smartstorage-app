@@ -9,7 +9,7 @@ import React, {
 import AsyncStorage from '@react-native-community/async-storage';
 
 import User from '../utils/model/user';
-import api from '../services/api';
+import { api, example } from '../services/api';
 
 interface SignInProps {
     email: string;
@@ -18,6 +18,7 @@ interface SignInProps {
 
 interface AuthState {
     token: string;
+    // TODO Mudar as tipagens
     user: User;
 }
 
@@ -49,6 +50,11 @@ const AuthProvider: React.FC = ({children}) => {
                 // Configura o token do header globalmente para todas as requisições
                 // api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             }
+
+            setData({
+                ...data,
+                user: example.user
+            });
 
             // Aplicação pronta para renderizar
             setLoading(false);

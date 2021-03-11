@@ -18,8 +18,19 @@ const example = {
                         id_list: '3e24decda23da54',
                         name: 'Macarrão',
                         type: 'Arroz, Pão, Massa, Mandioca',
-                        quantity: 2,
+                        qtd: 2,
                         color: ['#FFAB41', '#FFCE90'] ,
+                        validity: '18/01/2022',
+                        brand: 'São joão'
+                    },
+
+                    {
+                        id: '3e24decda23bhg54',
+                        id_list: '3e24decda23da54',
+                        name: 'Arroz',
+                        type: 'Arroz, Pão, Massa, Mandioca',
+                        qtd: 1,
+                        color: ['#FFE500', '#FFF493'],
                         validity: '18/01/2022',
                         brand: 'São joão'
                     },
@@ -38,9 +49,8 @@ const example = {
                         id_list: '3e24decda23da54',
                         name: 'Arroz',
                         type: 'Arroz, Pão, Massa, Mandioca',
-                        quantity: 1,
+                        qtd: 1,
                         color: ['#FFAB41', '#FFCE90'] ,
-                        validity: '18/02/2022',
                         brand: 'São joão'
                     },
                     // Vem mais items
@@ -54,4 +64,4 @@ const api = axios.create({
     baseURL: 'https://localhost:3333'
 });
 
-export default api;
+export {api, example};
