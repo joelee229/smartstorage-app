@@ -5,26 +5,26 @@ import { StackNavigationOptions } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 
 import { Container, Title, Text, Button } from './styles';
+import List from '../../../utils/model/list';
 
 interface ItemProps {
-    colors: string[];
-    title: string;
+    list: List;
 }
 
-const Item: React.FC<ItemProps> = ({ colors, title }) => {
+const Item: React.FC<ItemProps> = ({ list }) => {
     const navigation = useNavigation();
 
     const handleButtonPress = useCallback(() => {
-        navigation.navigate('List', { title });
+        navigation.navigate('List', { items: list.items, title: list.title });
     }, []);
 
     return(
         <Container 
-            colors={colors}
+            colors={list.color}
             start={{x: 0.1, y: 0.5}}
             end={{x: 0.5, y: 1.0}}
         >
-            <Button style={{ marginRight: 8 }}>
+            <Button style={{ marginRight: 12 }}>
                 <Icon
                     name="times"
                     size={20}
@@ -33,7 +33,7 @@ const Item: React.FC<ItemProps> = ({ colors, title }) => {
             </Button>
             
             <View style={{ flex: 1 }}>
-                <Title>{title}</Title>
+                <Title>{list.title}</Title>
             </View>
 
             <TouchableOpacity onPress={handleButtonPress} style={{ padding: 16 }}>

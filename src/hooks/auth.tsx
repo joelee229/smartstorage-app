@@ -3,7 +3,8 @@ import React, {
     createContext,
     useState,
     useCallback,
-    useEffect 
+    useEffect,
+    useMemo
 } from 'react';
 
 import AsyncStorage from '@react-native-community/async-storage';
@@ -23,7 +24,7 @@ interface AuthState {
 }
 
 interface AuthContextData {
-    user: User;
+    user: User | null;
     loading: boolean;
     signIn(data: SignInProps): Promise<void>;
     signOut(): Promise<void>;
@@ -34,7 +35,8 @@ interface AuthContextData {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 const AuthProvider: React.FC = ({children}) => {
-    const [data, setData] = useState<AuthState>({} as AuthState);
+    // const [data, setData] = useState<AuthState>({} as AuthState);
+    const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
     // Assim que for rederizado buscar no AsyncStorage os dados do user e armazenar no state
@@ -45,16 +47,13 @@ const AuthProvider: React.FC = ({children}) => {
 
             // Só armazena no state data se tiver algo nessas variáveis
             if(token[1] && user[1]){
-                setData({ token: token[1], user: JSON.parse(user[1]) });
+                setUser(JSON.parse(user[1]));
 
                 // Configura o token do header globalmente para todas as requisições
                 // api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             }
 
-            setData({
-                ...data,
-                user: example.user
-            });
+            setUser(example.user);
 
             // Aplicação pronta para renderizar
             setLoading(false);
@@ -79,7 +78,7 @@ const AuthProvider: React.FC = ({children}) => {
             api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
             // Armazena a resposta do back no data
-            setData({ token, user });
+            setUser(user);
         } catch(err){
             alert(err);
         } finally {
@@ -92,22 +91,28 @@ const AuthProvider: React.FC = ({children}) => {
         await AsyncStorage.setItem('@SmartStorage:user', JSON.stringify(user));
 
         // Armazena esse user atualizado no state
-        setData({
-            ...data,
-            user
-        });
-    }, [data]);
+        setUser(user);
+    }, [user]);
 
     const signOut = useCallback(async () => {
         await AsyncStorage.multiRemove(['@SmartStorage:token', '@SmartStorage:user']);
 
-        setData({} as AuthState);
+        setUser(null);
     }, []);
+
+    // TODO: Tentar usar esse state
+    const value = useMemo(() => ({ 
+        user, 
+        signIn, 
+        signOut, 
+        updateUser,
+        loading 
+    }), [user, loading]);
 
     // Retornamos um React component que oferece certos dados para os componentes filhos
     // Através do Provider do contexto que criamos antes
     return(
-        <AuthContext.Provider value={{ user: data.user, signIn, signOut, updateUser,loading }}>
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     );    

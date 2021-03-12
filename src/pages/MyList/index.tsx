@@ -10,6 +10,7 @@ import AddItem from '../AddItem';
 import Item from './Item';
 import AddList from '../AddList';
 import List from './List';
+import { useAuth } from '../../hooks/auth';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,7 @@ const ShopRoute: React.FC = () => {
 };
 
 const MyList: React.FC = () => {
+    const { user } = useAuth();
     const navigation = useNavigation();
 
     return(
@@ -72,10 +74,12 @@ const MyList: React.FC = () => {
                     style={{ flex: 1 }}
                     scrollEnabled
                 >
-                    <Item
-                        colors={['#FFE500', '#FFF493']}
-                        title="Dispensa"
-                    />
+                    {user?.lists.map(list => (
+                        <Item
+                            key={list.id}
+                            list={list}
+                        />
+                    ))}
                 </ScrollView>
             </Body>
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useImperativeHandle, forwardRef } from 'react';
+import React, { useCallback, useState, useImperativeHandle, forwardRef, useEffect } from 'react';
 import { View } from 'react-native';
 import { FontAwesome5 as Icon } from '@expo/vector-icons';
 
@@ -13,12 +13,19 @@ interface ItemProps {
     cType?: string;
     onChange(itemId: string, newVal: number, listName: string): void;
     isEditing: boolean;
+    resetItem: boolean;
+    reset(re: boolean): void;
 }
 
 
-const ListItem: React.FC<ItemProps> = ({item, isEditing, onChange, cType='', listName}) => {
-    const [num, setNum] = useState<number>(item.qtd);
+const ProductItem: React.FC<ItemProps> = ({item, isEditing, onChange, cType='', listName, resetItem, reset}) => {
+    const [num, setNum] = useState<number>(0);
 
+    useEffect(() => {
+        setNum(item.qtd);
+
+        reset(resetItem);
+    }, [resetItem]);
     // Note: useCallback gera uma função que nunca se reenderiza novamente.
     // Para funções que alteram um estado coloque este estado como dependência
 
@@ -32,7 +39,7 @@ const ListItem: React.FC<ItemProps> = ({item, isEditing, onChange, cType='', lis
         } else {
             if(num > 0){
                 val = num - 1;
-                setNum(num - 1);
+                setNum(prevState => prevState - 1);
             }
         }
         onChange(item.id, val, listName);
@@ -80,4 +87,4 @@ const ListItem: React.FC<ItemProps> = ({item, isEditing, onChange, cType='', lis
     );
 };
 
-export default ListItem;
+export default ProductItem;

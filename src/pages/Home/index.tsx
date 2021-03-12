@@ -33,11 +33,12 @@ import {
     HiddenButton,
     HiddenButtonText
 } from './styles';
-import ListItem from '../../components/ListItem';
+import ProductItem from '../../components/ProductItem';
 import AddItem from '../AddItem';
 import { useAuth } from '../../hooks/auth';
 import Item from '../../utils/model/item';
 import List from '../../utils/model/list';
+import { example } from '../../services/api';
 
 const Stack = createStackNavigator();
 
@@ -66,7 +67,13 @@ const Home: React.FC = () => {
     const { user } = useAuth();
     const navigation = useNavigation();
     const [isEditing, setIsEditing] = useState<boolean>(false);
-    const [listState, setListState] = useState<Item[]>(user.lists[0].items);
+    const userItems = user.lists[0].items;
+    // Testar recebendo em um useEffect
+    const [productItems, setProductItems] = useState<Item[]>(userItems);
+
+    // useEffect(() => {
+    //     setProductItems(userItems);
+    // }, [productItems]);
 
     // TODO: Talvez vai precisar de um state contendo esse array
     
@@ -79,15 +86,15 @@ const Home: React.FC = () => {
 
     const handleHiddenButtonCancel = useCallback(() => {
         // arrayList = user.lists;
-        // setListState(user.lists[0].items);
+        setProductItems(user.lists[0].items);
         
         console.log("Lista do context",user.lists[0].items);
-        console.log("Lista do state",user.lists[0].items);
+        console.log("Lista do state", productItems);
         setIsEditing(false);
-    }, [listState, user]);
+    }, [productItems]);
 
     const handleHiddenButtonSubmit = useCallback(() => {
-        console.log(listState);
+        console.log(productItems);
 
         // TODO: Mandar esse array alterado para o context
         // updateItem()
@@ -98,11 +105,8 @@ const Home: React.FC = () => {
             setIsEditing(true);
         }
 
-        // arrayList.filter(list => list.title === listName)[0]
-        //     .items.filter(item => item.id === itemId)[0].qtd = newVal;
-
         // Busca o item em específico no array
-        const changedItem = listState.find(item => item.id === itemId);
+        const changedItem = productItems.find(item => item.id === itemId);
 
         // Altera o atributo qtd como queremos
         if(changedItem){
@@ -110,15 +114,16 @@ const Home: React.FC = () => {
         }
 
         // Meio que copia e junta tudo em um novo array
-        const listItems = Object.assign([], listState, changedItem);
+        const items = Object.assign([], productItems, changedItem);
 
         // Realoca esse novo array no state
-        setListState(listItems);
+        // Por algum motivo aqui ele altera o context
+        setProductItems((prevItems) => Object.assign([], prevItems, changedItem));
 
-    }, [isEditing, listState]);
+    }, [isEditing, productItems]);
 
     const handleRenderItem = useCallback(({item}) => (
-        <ListItem
+        <ProductItem
             item={item}
             onChange={handleEditingChange}
             isEditing={isEditing}
@@ -142,7 +147,7 @@ const Home: React.FC = () => {
                         </TouchableOpacity>
                     </Head>
                     <Header>
-                        <T1>Acompanhe seus alimentos</T1>
+                        <T1>Acompanhe seus alimentos{example.user.lists[0].items[0].qtd}</T1>
                         <InputContainer>
                             <TextInput
                                 placeholder="Pesquisar..."
@@ -177,8 +182,9 @@ const Home: React.FC = () => {
                             colors={['#71CB32', '#BCEA9D']}
                          */}
                         <FlatList
-                            data={listState}
+                            data={productItems}
                             renderItem={handleRenderItem}
+                            keyExtractor={(item, index) => index.toString()}
                             horizontal
                             contentContainerStyle={{ paddingVertical: 2 }}
                             scrollEnabled
@@ -193,8 +199,9 @@ const Home: React.FC = () => {
 
                         {/* TODO: Criar diferentes array de itens dependendo do filtro */}
                         <FlatList
-                            data={listState}
+                            data={productItems}
                             renderItem={handleRenderItem}
+                            keyExtractor={(item, index) => index.toString()}
                             horizontal
                             contentContainerStyle={{ paddingVertical: 2 }}
                             scrollEnabled
@@ -208,8 +215,9 @@ const Home: React.FC = () => {
                         </View>
 
                         <FlatList
-                            data={listState}
+                            data={productItems}
                             renderItem={handleRenderItem}
+                            keyExtractor={(item, index) => index.toString()}
                             horizontal
                             contentContainerStyle={{ paddingVertical: 2 }}
                             scrollEnabled

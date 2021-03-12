@@ -6,7 +6,7 @@ import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/
 
 import { Container, ImageBackground, Head, Header, Button, InputContainer, TextInput, T1, Body, AddButton } from './styles';
 import Back from '../../assets/backImage.jpg';
-import ListItem from '../../components/ListItem';
+import ProductItem from '../../components/ProductItem';
 import AddShopItem from './AddShopItem';
 
 const Stack = createStackNavigator();
@@ -69,12 +69,12 @@ const ShopList: React.FC = (props) => {
                     style={{ flex: 1 }}
                     scrollEnabled
                 >
-                    <ListItem
+                    {/* <ProductItem
                         colors={['#FFE500', '#FFF493']}
                         type="list"
                         title="Macarrão"
                         qtd={5}
-                    />
+                    /> */}
                 </ScrollView>
             </Body>
 
