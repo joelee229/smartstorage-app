@@ -38,10 +38,6 @@ const SignIn: React.FC = () => {
                     .required("Email obrigatório"),
                 password: Yup.string()
                     .min(8, "No mínimo 8 caractéres")
-                    .matches(
-                        /^(?=\D*\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{8,30}$/,
-                        "A senha deve conter no letras maiúsculas, minúsculas e números"
-                    ),
             });
 
             // Valida o data
@@ -51,7 +47,7 @@ const SignIn: React.FC = () => {
 
             // Success validation
             // Executa o método signIn do contexto criado
-            // await signIn(data);
+            await signIn(data);
         } catch(err) {
             // Se o erro pertencer a validação do form
             if (err instanceof Yup.ValidationError) {
@@ -124,6 +120,7 @@ const SignIn: React.FC = () => {
                                 placeholder="********"
                                 secureTextEntry
                                 returnKeyType="send"
+                                autoCapitalize="none"
                                 onSubmitEditing={() => formRef.current?.submitForm()}
                             />
 

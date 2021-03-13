@@ -15,7 +15,7 @@ const Item: React.FC<ItemProps> = ({ list }) => {
     const navigation = useNavigation();
 
     const handleButtonPress = useCallback(() => {
-        navigation.navigate('List', { items: list.items, title: list.title });
+        navigation.navigate('List', { id_list: list._id, title: list.title });
     }, []);
 
     return(
@@ -24,13 +24,13 @@ const Item: React.FC<ItemProps> = ({ list }) => {
             start={{x: 0.1, y: 0.5}}
             end={{x: 0.5, y: 1.0}}
         >
-            <Button style={{ marginRight: 12 }}>
+            {/* <Button style={{ marginRight: 12 }}>
                 <Icon
                     name="times"
                     size={20}
                     color="white"
                 />
-            </Button>
+            </Button> */}
             
             <View style={{ flex: 1 }}>
                 <Title>{list.title}</Title>

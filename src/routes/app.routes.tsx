@@ -66,7 +66,7 @@ const AppRoutes: React.FC = () => {
                     ),
                 }}
             />
-            <App.Screen 
+            {/* <App.Screen 
                 name="ShopList" 
                 component={ShopList}
                 options={{
@@ -86,7 +86,7 @@ const AppRoutes: React.FC = () => {
                         }}>Lista de compras</Text>
                     ),
                 }}
-            />
+            /> */}
             <App.Screen 
                 name="Terms" 
                 component={Terms}

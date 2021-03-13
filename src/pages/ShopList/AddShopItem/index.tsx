@@ -60,6 +60,8 @@ const AddShopItem: React.FC = () => {
             Alert.alert(
                 "Adicionado com sucesso"
             );
+
+            navigation.goBack();
         } catch(err) {
             if(err instanceof Yup.ValidationError){
                 // Validation failed

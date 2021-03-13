@@ -38,11 +38,8 @@ const SignUp: React.FC = () => {
                     .required("Email obrigatório"),
                 password: Yup.string()
                     .min(8, "No mínimo 8 caractéres")
-                    .matches(
-                        /^(?=\D*\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{8,30}$/,
-                        "A senha deve conter no letras maiúsculas, minúsculas e números"
-                    ),
             });
+            // console.log(data);
 
             await schema.validate(data, {
                 abortEarly: false,
@@ -50,14 +47,14 @@ const SignUp: React.FC = () => {
 
             // Success validation
             setLoading(true);
-            // await api.post('/signUp', data);
+            await api.post('user/create', data);
 
             Alert.alert(
                 'Cadastro realizado com sucesso',
                 'Você já pode fazer login na aplicação.'
             );
 
-            navigation.goBack()
+            navigation.goBack();
         } catch(err) {
             if (err instanceof Yup.ValidationError) {
                 // Validation failed
@@ -69,9 +66,10 @@ const SignUp: React.FC = () => {
                 return;
             }
 
+            console.log(JSON.stringify(err));
             Alert.alert(
                 "Erro na autenticação",
-                "Ocorreu um erro ao fazer o cadastro, cheque as credenciais"
+                "Ocorreu um erro ao fazer o cadastro, cheque as credenciais",
             );
         } finally {
             setLoading(false);
@@ -143,6 +141,7 @@ const SignUp: React.FC = () => {
                                 secureTextEntry
                                 textContentType="newPassword"
                                 returnKeyType="send"
+                                autoCapitalize="none"
                                 onSubmitEditing={() => formRef.current?.submitForm()}
                             />
                         </Form>

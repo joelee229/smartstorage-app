@@ -5,8 +5,10 @@ import { useNavigation, DrawerActions } from '@react-navigation/native';
 
 import { Container, ImageBackground, Head, Body, Title, Name, Header, Button, ButtonText } from './styles';
 import Back from '../../assets/backApp.jpg';
+import { useAuth } from '../../hooks/auth';
 
 const Profile: React.FC = () => {
+    const { user } = useAuth();
     const navigation = useNavigation();
 
     return(
@@ -26,7 +28,7 @@ const Profile: React.FC = () => {
                 </Head>
 
                 <Header>
-                    <Name>Jane Doe</Name>
+                    <Name>{user?.name}</Name>
                 </Header>
 
                 <Body>

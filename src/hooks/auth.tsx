@@ -10,7 +10,7 @@ import React, {
 import AsyncStorage from '@react-native-community/async-storage';
 
 import User from '../utils/model/user';
-import { api, example } from '../services/api';
+import api from '../services/api';
 
 interface SignInProps {
     email: string;
@@ -37,6 +37,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 const AuthProvider: React.FC = ({children}) => {
     // const [data, setData] = useState<AuthState>({} as AuthState);
     const [user, setUser] = useState<User | null>(null);
+    // TODO: Separar lista de user
     const [loading, setLoading] = useState<boolean>(true);
 
     // Assim que for rederizado buscar no AsyncStorage os dados do user e armazenar no state
@@ -48,12 +49,13 @@ const AuthProvider: React.FC = ({children}) => {
             // Só armazena no state data se tiver algo nessas variáveis
             if(token[1] && user[1]){
                 setUser(JSON.parse(user[1]));
+                // console.log(token[1]);
 
                 // Configura o token do header globalmente para todas as requisições
-                // api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                api.defaults.headers.common['Authorization'] = `Bearer ${token[1]}`;
             }
 
-            setUser(example.user);
+            // setUser(example.user);
 
             // Aplicação pronta para renderizar
             setLoading(false);
@@ -65,13 +67,13 @@ const AuthProvider: React.FC = ({children}) => {
     const signIn = useCallback(async (data: SignInProps) => {
         setLoading(true);
       try{
-            const response = await api.post('/login', data);
+            const response = await api.post('user/login', data);
 
             const { token, user } = response.data;
 
             await AsyncStorage.multiSet([
                 ['@SmartStorage:token', token],
-                ['@SmartStorage:user', user]
+                ['@SmartStorage:user', JSON.stringify(user)]
             ]);
 
             // Configura o token do header globalmente para todas as requisições
@@ -80,7 +82,7 @@ const AuthProvider: React.FC = ({children}) => {
             // Armazena a resposta do back no data
             setUser(user);
         } catch(err){
-            alert(err);
+            alert(err.message);
         } finally {
             setLoading(false);
         }
@@ -88,11 +90,17 @@ const AuthProvider: React.FC = ({children}) => {
 
     const updateUser = useCallback(async (user: User) => {
         // Armazena esse user atualizado no AsyncStorage
-        await AsyncStorage.setItem('@SmartStorage:user', JSON.stringify(user));
+        try {
+            const response = await api.patch('User/update', user);
 
-        // Armazena esse user atualizado no state
-        setUser(user);
-    }, [user]);
+            await AsyncStorage.setItem('@SmartStorage:user', JSON.stringify(user));
+
+            // Armazena esse user atualizado no state
+            setUser(response.data);
+        }catch(err) {
+            alert(err.message);
+        }
+    }, []);
 
     const signOut = useCallback(async () => {
         await AsyncStorage.multiRemove(['@SmartStorage:token', '@SmartStorage:user']);

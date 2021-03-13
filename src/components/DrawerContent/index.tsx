@@ -5,8 +5,10 @@ import { FontAwesome5 as Icon } from '@expo/vector-icons';
 
 import styles from './styles';
 import Logo from '../../assets/logo.png';
+import { useAuth } from '../../hooks/auth';
 
 const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
+    const { signOut } = useAuth();
 
     return(
         <View style={styles.container} >
@@ -25,17 +27,18 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
                 scrollEnabled
             >
                 {/* Body */}
-                <DrawerItemList 
-                    {...props} 
+                <DrawerItemList
+                    {...props}
                     itemStyle={styles.item}
                     labelStyle={styles.itemLabel}
                     activeTintColor="black"
                     inactiveTintColor="#979797"
                 />
 
+                {/* Modal de confirmação compartilhado */}
                 <DrawerItem 
                     label="Deslogar"
-                    onPress={() => {}}
+                    onPress={signOut}
                     style={styles.item}
                     labelStyle={styles.itemLabel}
                     icon={({ size }) => (

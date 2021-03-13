@@ -112,3 +112,9 @@ export const HiddenButtonText = styled.Text`
     font-size: 18px;
     color: white;
 `;
+
+export const Text = styled.Text`
+    font-family: 'Roboto_400Regular';
+    font-size: 16px;
+    color: #797979;
+`;

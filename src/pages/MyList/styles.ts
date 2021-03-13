@@ -80,3 +80,9 @@ export const AddButton = styled.TouchableOpacity`
     justify-content: center;
     align-items: center;
 `;
+
+export const Text = styled.Text`
+    font-family: 'Roboto_400Regular';
+    font-size: 16px;
+    color: #797979;
+`;

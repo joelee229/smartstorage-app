@@ -13,19 +13,17 @@ interface ItemProps {
     cType?: string;
     onChange(itemId: string, newVal: number, listName: string): void;
     isEditing: boolean;
-    resetItem: boolean;
-    reset(re: boolean): void;
+    // resetItem: boolean;
+    // reset(re: boolean): void;
 }
 
 
-const ProductItem: React.FC<ItemProps> = ({item, isEditing, onChange, cType='', listName, resetItem, reset}) => {
-    const [num, setNum] = useState<number>(0);
+const ProductItem: React.FC<ItemProps> = ({item, isEditing, onChange, cType='', listName }) => {
+    const [num, setNum] = useState<number>(item.quantity);
 
-    useEffect(() => {
-        setNum(item.qtd);
-
-        reset(resetItem);
-    }, [resetItem]);
+    // useEffect(() => {
+    //     setNum(item.quantity);
+    // }, []);
     // Note: useCallback gera uma função que nunca se reenderiza novamente.
     // Para funções que alteram um estado coloque este estado como dependência
 
@@ -42,7 +40,7 @@ const ProductItem: React.FC<ItemProps> = ({item, isEditing, onChange, cType='', 
                 setNum(prevState => prevState - 1);
             }
         }
-        onChange(item.id, val, listName);
+        onChange(item._id, val, listName);
     }, [num, isEditing, item]);
 
     return(

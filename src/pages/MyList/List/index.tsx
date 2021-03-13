@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useMemo, useEffect } from 'react';
-import { TouchableOpacity, ScrollView } from 'react-native';
+import { TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { FontAwesome5 as Icon } from '@expo/vector-icons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 
@@ -16,64 +16,107 @@ import {
     TextInput,
     HiddenButtonContainer,
     HiddenButton,
-    HiddenButtonText
+    HiddenButtonText,
+    Text
  } from './styles';
 import Back from '../../../assets/backImage.jpg';
 import ProductItem from '../../../components/ProductItem';
 import Item from '../../../utils/model/item';
+import api from '../../../services/api';
 
 type ParamList = {
     Detail: {
         title: string;
-        items: Item[]
+        // items: Item[]
+        id_list: string;
     }
 }
 
 const List: React.FC = () => {
     const navigation = useNavigation();
     const route = useRoute<RouteProp<ParamList, 'Detail'>>();
-    const { items, title } = useMemo(() => route.params, [route]);
+    const { id_list, title } = useMemo(() => route.params, [route]);
     const [isEditing, setIsEditing] = useState<boolean>(false);
-    const [newItems, setNewItems] = useState(items);
-    const [resetItem, setResetItem] = useState<boolean>(false);
+    const [newItems, setNewItems] = useState<Item[] | null>(null);
+    let alteredItems = [] as Item[];
+    // TODO: Array state de items em edição
+    // Ae se o user apertar em enviar manda esse array e outras info
+    // Senão achar uma forma de resetar tudo
 
 
-    // useEffect(() => {
-    //     setNewItems(items);
-    // }, []);
+    useEffect(() => {
+        async function loaditems() {
+            const response = await api.get('item/getItens', {
+                params: {
+                    id_list
+                }
+            });
+
+            // if(!response.data.lenght){
+            //     console.log('entrei');
+            //     setNewItems(null);
+            // } else {
+            //     setNewItems(response.data);
+            // }
+
+            setNewItems(response.data);
+       }
+
+       loaditems();
+    }, []);
+
+    const refreshItems = useCallback(async () => {
+        const response = await api.get('item/getItens', {
+            params: {
+                id_list
+            }
+        });
+
+        // console.log(response.data.length);
+
+        // if(!response.data.lenght){
+        //     console.log('entrei');
+        //     setNewItems(null);
+        // } else {
+        //     setNewItems(response.data);
+        // }
+
+        setNewItems(response.data);
+    }, [newItems]);
 
 
-    const handleEditingChange = useCallback((itemId: string, newVal: number) => {
+    const handleEditingChange = useCallback((itemId: string, newVal: number, listName: string) => {
         if(!isEditing){
             setIsEditing(true);
         }
 
         // Busca o item em específico no array
-        const changedItem = newItems.find(item => item.id === itemId);
+        const changedItem = newItems?.find(item => item._id === itemId);
 
         // Altera o atributo qtd como queremos
         if(changedItem){
-            changedItem.qtd = newVal;
+            changedItem.quantity = newVal;
         }
 
         // Meio que copia e junta tudo em um novo array
-        // const prodItems = Object.assign([], items, changedItem);
+        const items = Object.assign([], newItems, changedItem);
+        alteredItems.push(items);
 
         // Realoca esse novo array no state
         // Por algum motivo aqui ele altera o context
-        setNewItems((prevItems) => Object.assign([], prevItems, changedItem));
+        // setProductItems((prevItems) => Object.assign([], prevItems, changedItem));
 
-    }, [isEditing]);
-
+    }, [isEditing, newItems]);
     const handleHiddenButtonCancel = useCallback(() => {
-        setNewItems(items);
-        console.log("Items de route: ", items);
-        console.log("Items do state: ", newItems);
+        // setNewItems(null);
+        refreshItems();        
+        // console.log("Lista do context", user?.lists[0].items);
+        // console.log("Lista do state", productItems);
         setIsEditing(false);
     }, []);
 
     const handleHiddenButtonSubmit = useCallback(() => {
-        console.log("Items: ",newItems);
+        Alert.alert("Atualizado com sucesso");
 
         // TODO: Mandar esse array alterado para o context
         // updateItem()
@@ -92,7 +135,7 @@ const List: React.FC = () => {
                     </TouchableOpacity>
                 </Head>
                 <Header>
-                    <T1>aaaaaaaaaaaaaaa</T1>      
+                    <T1>{title}</T1>      
                 </Header>
             </ImageBackground>
 
@@ -111,22 +154,23 @@ const List: React.FC = () => {
                     style={{ flex: 1 }}
                     scrollEnabled
                 >
-                    {newItems.map(item => (
-                        <ProductItem
-                            key={item.id}
-                            item={item}
-                            onChange={handleEditingChange}
-                            isEditing={isEditing}
-                            listName="Default"
-                            resetItem={resetItem}
-                            reset={(re) => setResetItem(!re)}
-                        />
-                    ))}
+                    {newItems ? (
+                        newItems.map(item => (
+                            <ProductItem
+                                key={item._id}
+                                item={item}
+                                onChange={handleEditingChange}
+                                isEditing={isEditing}
+                                listName="Default"
+                            />
+                        ))
+                    ) : null}
+                    {!newItems?.length && <Text>Essa lista não possui itens</Text>}
                 </ScrollView>
             </Body>
 
             {/* Adicionar item nessa lista em específico */}
-            <AddButton onPress={() => navigation.navigate('AddItem')}>
+            <AddButton onPress={() => navigation.navigate('AddItem', {id_list, title: 'Default'})}>
                 <Icon 
                     name="plus"
                     size={40}

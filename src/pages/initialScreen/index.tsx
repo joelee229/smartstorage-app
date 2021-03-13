@@ -13,7 +13,7 @@ const InitialScreen: React.FC = () => {
     return (
         <Container>
             {/* TODO: Redimensionar de uma forma correta */}
-            <Image style={{width: 180, height: 120, marginTop: 16}} source={Logo} />
+            <Image style={{width: 180, height: 125, marginTop: 16}} source={Logo} />
             <Image style={{width: 200, height: 245.5, marginTop: 16}} source={Woman} />
 
             <Button onPress={() => navigation.navigate('SignIn')} filled={true}>

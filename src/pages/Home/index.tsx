@@ -6,7 +6,8 @@ import {
     Platform, 
     View, 
     TouchableOpacity,
-    FlatList
+    FlatList,
+    Alert
 } from 'react-native';
 import { FontAwesome5 as Icon } from '@expo/vector-icons';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
@@ -38,7 +39,7 @@ import AddItem from '../AddItem';
 import { useAuth } from '../../hooks/auth';
 import Item from '../../utils/model/item';
 import List from '../../utils/model/list';
-import { example } from '../../services/api';
+import api from '../../services/api';
 
 const Stack = createStackNavigator();
 
@@ -67,13 +68,30 @@ const Home: React.FC = () => {
     const { user } = useAuth();
     const navigation = useNavigation();
     const [isEditing, setIsEditing] = useState<boolean>(false);
-    const userItems = user.lists[0].items;
+    // const userItems = user?.lists[0].items;
     // Testar recebendo em um useEffect
-    const [productItems, setProductItems] = useState<Item[]>(userItems);
+    const [productItems, setProductItems] = useState<Item[]>([] as Item[]);
+    const [searchItems, setSearchItems] = useState<Item[]>([] as Item[]);
+    let alteredItems = [] as Item[];
 
-    // useEffect(() => {
-    //     setProductItems(userItems);
-    // }, [productItems]);
+    useEffect(() => {
+        async function loadItemsData() {
+            const response = await api.get('item/search', {
+                params: {
+                    filter: 'latest',
+                    id_list: '604c23108d94dc24c14aa3b6'
+                }
+            });
+
+            const aux = [];
+            for(let i = response.data.length - 1; i >=0; i--){
+                aux.push(response.data[i]);
+            }
+            setProductItems(aux);
+        }
+
+        loadItemsData();
+    }, [productItems]);
 
     // TODO: Talvez vai precisar de um state contendo esse array
     
@@ -84,17 +102,39 @@ const Home: React.FC = () => {
     // O estado criado pelo search tem que substituir os cards atuais
     // TODO: Nested ScrollView issue
 
+    const handleHiddenButtonSearch = useCallback(async (val: string) => {
+            const response = await api.get('item/search', {
+                params: {
+                    filter: 'name',
+                    id_list: '604c23108d94dc24c14aa3b6',
+                    value: val
+                }
+            });
+
+            const aux = [];
+            for(let i = response.data.length - 1; i >=0; i--){
+                aux.push(response.data[i]);
+            }
+            setProductItems(aux);
+        Alert.alert("Atualizado com sucesso");
+
+        // TODO: Mandar esse array alterado para o context
+        // updateItem()
+    }, []);
+
     const handleHiddenButtonCancel = useCallback(() => {
         // arrayList = user.lists;
-        setProductItems(user.lists[0].items);
+        if(user){
+            setProductItems([] as Item[]);
+        }
         
-        console.log("Lista do context",user.lists[0].items);
-        console.log("Lista do state", productItems);
+        // console.log("Lista do context", user?.lists[0].items);
+        // console.log("Lista do state", productItems);
         setIsEditing(false);
     }, [productItems]);
 
     const handleHiddenButtonSubmit = useCallback(() => {
-        console.log(productItems);
+        Alert.alert("Atualizado com sucesso");
 
         // TODO: Mandar esse array alterado para o context
         // updateItem()
@@ -106,19 +146,20 @@ const Home: React.FC = () => {
         }
 
         // Busca o item em específico no array
-        const changedItem = productItems.find(item => item.id === itemId);
+        const changedItem = productItems.find(item => item._id === itemId);
 
         // Altera o atributo qtd como queremos
         if(changedItem){
-            changedItem.qtd = newVal;
+            changedItem.quantity = newVal;
         }
 
         // Meio que copia e junta tudo em um novo array
         const items = Object.assign([], productItems, changedItem);
+        alteredItems.push(items);
 
         // Realoca esse novo array no state
         // Por algum motivo aqui ele altera o context
-        setProductItems((prevItems) => Object.assign([], prevItems, changedItem));
+        // setProductItems((prevItems) => Object.assign([], prevItems, changedItem));
 
     }, [isEditing, productItems]);
 
@@ -147,7 +188,7 @@ const Home: React.FC = () => {
                         </TouchableOpacity>
                     </Head>
                     <Header>
-                        <T1>Acompanhe seus alimentos{example.user.lists[0].items[0].qtd}</T1>
+                        <T1>Acompanhe seus alimentos</T1>
                         <InputContainer>
                             <TextInput
                                 placeholder="Pesquisar..."
@@ -166,11 +207,27 @@ const Home: React.FC = () => {
                 
                 <Body>
                     <ScrollView style={{ flex:1, paddingHorizontal: 16 }}>
+                        {/* {searchItems.length && (
+                            <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, marginBottom: 8 }}>
+                                <T2>Resultado da pesquisa</T2>
+                            </View>
+                        )}
+                        {searchItems.length && (
+                            <FlatList
+                                data={searchItems}
+                                renderItem={handleRenderItem}
+                                keyExtractor={(item, index) => index.toString()}
+                                horizontal
+                                contentContainerStyle={{ paddingVertical: 2 }}
+                                scrollEnabled
+                            />
+                        )} */}
                         <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, marginBottom: 8 }}>
-                            <T2>Recentes</T2>
-                            <TouchableOpacity>
+                            {/* <T2>Recentes</T2> */}
+                            <T2>Últimos adicionados</T2>
+                            {/* <TouchableOpacity onPress={() => navigation.navigate('List')}>
                                 <Text>Ver mais</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
                         {/* 
                             colors={['#FF3840', '#FF878C']}
@@ -181,6 +238,7 @@ const Home: React.FC = () => {
 
                             colors={['#71CB32', '#BCEA9D']}
                          */}
+
                         <FlatList
                             data={productItems}
                             renderItem={handleRenderItem}
@@ -189,43 +247,46 @@ const Home: React.FC = () => {
                             contentContainerStyle={{ paddingVertical: 2 }}
                             scrollEnabled
                         />
+
+                        {!productItems && <Text>Você não possui nenhum item recente</Text>}
                         
                         <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, marginBottom: 8 }}>
                             <T3>Preste a vencer</T3>
-                            <TouchableOpacity>
+                            {/* <TouchableOpacity>
                                 <Text>Ver mais</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
 
                         {/* TODO: Criar diferentes array de itens dependendo do filtro */}
-                        <FlatList
+                        {/* <FlatList
                             data={productItems}
                             renderItem={handleRenderItem}
                             keyExtractor={(item, index) => index.toString()}
                             horizontal
                             contentContainerStyle={{ paddingVertical: 2 }}
                             scrollEnabled
-                        />
+                        /> */}
+                        {!productItems && <Text>Você não possui nenhum item recente</Text>}
                         
                         <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, marginBottom: 8 }}>
                             <T3>Listas personalizadas</T3>
-                            <TouchableOpacity>
+                            {/* <TouchableOpacity>
                                 <Text>Ver mais</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
 
-                        <FlatList
+                        {/* <FlatList
                             data={productItems}
                             renderItem={handleRenderItem}
                             keyExtractor={(item, index) => index.toString()}
                             horizontal
                             contentContainerStyle={{ paddingVertical: 2 }}
                             scrollEnabled
-                        />
+                        /> */}
                     </ScrollView>
                 </Body>
 
-                <AddButton onPress={() => navigation.navigate('AddItem', {isList: false})}>
+                <AddButton onPress={() => navigation.navigate('AddItem', {id_list: '604be4b65d034d2dc8edf60c', title: 'Default'})}>
                     <Icon 
                         name="plus"
                         size={40}

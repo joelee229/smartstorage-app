@@ -1,16 +1,30 @@
-import React from 'react';
-import { TouchableOpacity, StatusBar, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { TouchableOpacity, StatusBar, ScrollView, FlatList } from 'react-native';
 import { FontAwesome5 as Icon } from '@expo/vector-icons';
 import { useNavigation, DrawerActions, useRoute } from '@react-navigation/native';
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 
-import { Container, ImageBackground, Head, Header, Button, InputContainer, TextInput, T1, Body, AddButton } from './styles';
+import { 
+    Container, 
+    ImageBackground, 
+    Head, 
+    Header, 
+    Button, 
+    InputContainer, 
+    TextInput, 
+    T1,
+    Body, 
+    AddButton,
+    Text
+} from './styles';
 import Back from '../../assets/backImage.jpg';
 import AddItem from '../AddItem';
 import Item from './Item';
 import AddList from '../AddList';
 import List from './List';
+import TypeList from '../../utils/model/list';
 import { useAuth } from '../../hooks/auth';
+import api from '../../services/api';
 
 const Stack = createStackNavigator();
 
@@ -39,6 +53,21 @@ const ShopRoute: React.FC = () => {
 
 const MyList: React.FC = () => {
     const { user } = useAuth();
+    const [lists, setLists] = useState<TypeList[] | null>(null);
+
+    useEffect(() => {
+       async function loadList() {
+            const response = await api.get('list/get', {
+                params: {
+                    id_user: user?._id
+                }
+            });
+
+            setLists(response.data);
+       }
+
+       loadList();
+    }, []);
     const navigation = useNavigation();
 
     return(
@@ -74,12 +103,15 @@ const MyList: React.FC = () => {
                     style={{ flex: 1 }}
                     scrollEnabled
                 >
-                    {user?.lists.map(list => (
-                        <Item
-                            key={list.id}
-                            list={list}
-                        />
-                    ))}
+                    {lists ? (
+                        lists.map(list => (
+                            <Item
+                                key={list._id}
+                                list={list}
+                            />
+                        ))
+                    ) : null}
+                    {!lists?.length && <Text>Você não possui nenhuma lista</Text>}
                 </ScrollView>
             </Body>
 

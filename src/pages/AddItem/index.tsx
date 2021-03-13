@@ -2,7 +2,7 @@ import React, { useCallback, useState, useRef } from 'react';
 import { TouchableOpacity, StatusBar, View, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FontAwesome5 as Icon } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp, StackActions } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/mobile';
@@ -12,13 +12,21 @@ import { Container, Head, Title, Body, PickerButton, Text, Label, Select } from 
 import getValidationErrors from '../../utils/getValidationErrors';
 import Loading from '../../components/Loading';
 import Button from '../../components/Button';
+import { useAuth } from '../../hooks/auth';
 import Input from '../../components/Input';
 import api from '../../services/api';
 
 interface ItemProps {
     name: string;
 	brand: string;
-	qtd: number;
+	quantity: number;
+}
+
+type ParamList = {
+    Detail: {
+        id_list: string;
+        title?: string;
+    }
 }
 
 
@@ -27,21 +35,23 @@ const AddItem: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [date, setDate] = useState<Date>(new Date());
     const [show, setShow] = useState<boolean>(false);
+    const navigation = useNavigation();
+    const route = useRoute<RouteProp<ParamList, 'Detail'>>();
+    const { id_list, title } = route.params;
+    const { user } = useAuth();
     const formRef = useRef<FormHandles>(null);
 
-    const navigation = useNavigation();
 
 
     const handleSubmit = useCallback(async (data: ItemProps) => {
         // TODO: Pegar o id ou title da lista nos parâmetros da rota
         try {
-            
             formRef.current?.setErrors({});
 
             const schema = Yup.object().shape({
                 name: Yup.string()
                     .required('Nome obrigatório'),
-                qtd: Yup.number()
+                quantity: Yup.number()
                     .required('Quantidade obrigatória'),
                 brand: Yup.string()
                     .required('Marca obrigatória')
@@ -55,15 +65,28 @@ const AddItem: React.FC = () => {
             // Success Validation
             setLoading(true);
             // TODO: Lógica para adicionar esse item no state do contexto
-            // await api.post('/item/create', {
+            // console.log({
             //     ...data,
+            //     quantity: Number(data.quantity),
             //     type: selectedType,
-            //     validity: date,
+            //     validity: date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear(),
+            //     id_list
             // });
+            await api.post('item/create', {
+                ...data,
+                type: selectedType,
+                quantity: Number(data.quantity),
+                validity: date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear(),
+                id_list
+            });
+            console.log('Passei da request');
 
             Alert.alert(
                 "Adicionado com sucesso"
             );
+
+            // TODO: Resolver o problema do context para as listas se atualizarem quando um for adicionado
+            navigation.dispatch(StackActions.push('List', { id_list, title }));
         } catch(err) {
             if(err instanceof Yup.ValidationError){
                 // Validation failed
@@ -84,7 +107,7 @@ const AddItem: React.FC = () => {
             setLoading(false);
         }
 
-    }, [navigation, date, selectedType]);
+    }, [navigation, date, selectedType, user]);
 
     const handleDatePickerChange = useCallback((e, selectedDate) => {
         setShow(Platform.OS === 'ios');
@@ -98,7 +121,7 @@ const AddItem: React.FC = () => {
     }, []);
 
     if(loading){
-        return <Loading />
+        return <Loading />;
     }
 
     return(
@@ -135,7 +158,7 @@ const AddItem: React.FC = () => {
                                 <View style={{ flex: 1 }}>
                                     <Input 
                                         label="Quantidade"
-                                        name="qtd"
+                                        name="quantity"
                                         placeholder="1"
                                         keyboardType="number-pad"
                                     />
@@ -174,9 +197,9 @@ const AddItem: React.FC = () => {
                                             onValueChange={handleSelectChange}
                                             style={{ flex: 1 }}
                                         >
-                                            <Picker.Item label="Óleos e gorduras" value="Óleos e gorduras" />
-                                            <Picker.Item label="Açúcares e Doces" value="Açúcares e Doces" />
-                                            <Picker.Item label="Leite, Queijo, Íorgute" value="Leite, Queijo, Íorgute" />
+                                            <Picker.Item label="Óleos e Gorduras" value="Óleos e Gorduras" />
+                                            <Picker.Item label="Açucares e Doces" value="Açucares e Doces" />
+                                            <Picker.Item label="Leite, Queijo, Iorgute" value="Leite, Queijo, Iorgute" />
                                             <Picker.Item label="Carnes e Ovos" value="Carnes e Ovos" />
                                             <Picker.Item label="Feijões e Oleaginosas" value="Feijões e Oleaginosas" />
                                             <Picker.Item label="Legumes e Verduras" value="Legumes e Verduras" />

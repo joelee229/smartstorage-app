@@ -7,7 +7,7 @@ import {
     Platform, 
     Alert } from 'react-native';
 import { FontAwesome5 as Icon } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, StackActions } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/mobile';
@@ -17,6 +17,7 @@ import getValidationErrors from '../../utils/getValidationErrors';
 import { Container, Head, Title, Body, Select, Label } from './styles';
 import Loading from '../../components/Loading';
 import Button from '../../components/Button';
+import { useAuth } from '../../hooks/auth';
 import Input from '../../components/Input';
 import api from '../../services/api';
 
@@ -24,6 +25,7 @@ import api from '../../services/api';
 const AddItem: React.FC = () => {
     const [colorSelectedType, setColorSelectedType] = useState<string>();
     const [loading, setLoading] = useState<boolean>(false);
+    const { user } = useAuth();
     const formRef = useRef<FormHandles>(null);
 
     const navigation = useNavigation();
@@ -48,14 +50,18 @@ const AddItem: React.FC = () => {
             // Success Validation
             setLoading(true);
             // TODO: Lógica para atualizar a lista do user
-            // await api.post('/list/create', {
-            //     ...data,
-            //     colorType: colorSelectedType
-            // });
+            await api.post('list/create', {
+                ...data,
+                colorType: colorSelectedType,
+                id_user: user?._id
+            });
 
             Alert.alert(
                 "Adicionado com sucesso"
             );
+
+            // navigation.goBack();
+            navigation.dispatch(StackActions.push("MyList"));
         } catch(err) {
             if(err instanceof Yup.ValidationError){
                 // Validation failed
@@ -69,13 +75,14 @@ const AddItem: React.FC = () => {
             // Se for qualquer outro erro
             Alert.alert(
                 "Erro na autenticação",
-                "Ocorreu um erro ao fazer login, cheque as credenciais"
+                "Ocorreu um erro ao fazer o cadastro do item, cheque as credenciais"
             );
+            console.log(err);
         } finally {
             setLoading(false);
         }
 
-    }, [colorSelectedType]);
+    }, [colorSelectedType, user, navigation]);
 
     if(loading){
         return <Loading />;

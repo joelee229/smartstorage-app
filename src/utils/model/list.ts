@@ -1,7 +1,7 @@
 import Item from './item';
 
 interface List {
-	id: string;
+	_id: string;
 	id_user: string;
 	title: string;
 	color: string[];
