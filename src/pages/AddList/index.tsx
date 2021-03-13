@@ -50,10 +50,21 @@ const AddItem: React.FC = () => {
             // Success Validation
             setLoading(true);
             // TODO: Lógica para atualizar a lista do user
+            console.log({
+                ...data,
+                colorType: colorSelectedType,
+                id_user: user?._id
+            });
             await api.post('list/create', {
                 ...data,
                 colorType: colorSelectedType,
                 id_user: user?._id
+            },{
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "Authorization",
+                    "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+                }
             });
 
             Alert.alert(

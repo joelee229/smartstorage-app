@@ -11,7 +11,7 @@ export const ImageBackground = styled.ImageBackground`
 
 export const Head = styled.View`
     width: 100%;
-    padding: ${Constants.statusBarHeight + 8}px 24px 8px;
+    padding: ${Constants.statusBarHeight}px 24px 8px;
     flex-direction: row;
     align-items: center;
 `;
@@ -25,7 +25,7 @@ export const Title = styled.Text`
 
 export const Body = styled.View`
     flex: 1;
-    padding: 0 24px;
+    padding: 0 16px;
 `;
 
 export const Text = styled.Text`

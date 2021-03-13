@@ -72,6 +72,7 @@ const Home: React.FC = () => {
     // Testar recebendo em um useEffect
     const [productItems, setProductItems] = useState<Item[]>([] as Item[]);
     const [searchItems, setSearchItems] = useState<Item[]>([] as Item[]);
+    const [searchInput, setSearchInput] = useState<string>('');
     let alteredItems = [] as Item[];
 
     useEffect(() => {
@@ -84,8 +85,10 @@ const Home: React.FC = () => {
             });
 
             const aux = [];
-            for(let i = response.data.length - 1; i >=0; i--){
-                aux.push(response.data[i]);
+            if(response.data.length > 0){
+                for(let i = response.data.length - 1; i >=0; i--){
+                    aux.push(response.data[i]);
+                }
             }
             setProductItems(aux);
         }
@@ -102,24 +105,32 @@ const Home: React.FC = () => {
     // O estado criado pelo search tem que substituir os cards atuais
     // TODO: Nested ScrollView issue
 
-    const handleHiddenButtonSearch = useCallback(async (val: string) => {
+    const handleButtonSearch = useCallback(async () => {
+        if(!searchInput){
+            Alert.alert("Alerta", "Preencha o campo primeiro");
+        } else{
             const response = await api.get('item/search', {
                 params: {
                     filter: 'name',
                     id_list: '604c23108d94dc24c14aa3b6',
-                    value: val
+                    value: searchInput
                 }
             });
 
             const aux = [];
-            for(let i = response.data.length - 1; i >=0; i--){
-                aux.push(response.data[i]);
+            if(response.data.length > 0){
+                for(let i = response.data.length - 1; i >=0; i--){
+                    aux.push(response.data[i]);
+                }
+            }else {
+                alert('Nenhum item encontrado.');
             }
-            setProductItems(aux);
-        Alert.alert("Atualizado com sucesso");
+            setSearchItems(aux);
+        }
+    }, [searchInput]);
 
-        // TODO: Mandar esse array alterado para o context
-        // updateItem()
+    const handleInputChange = useCallback(async (text: string) => {
+        setSearchInput(text);
     }, []);
 
     const handleHiddenButtonCancel = useCallback(() => {
@@ -192,8 +203,9 @@ const Home: React.FC = () => {
                         <InputContainer>
                             <TextInput
                                 placeholder="Pesquisar..."
+                                onChangeText={handleInputChange}
                             />
-                            <Button>
+                            <Button onPress={handleButtonSearch}>
                                 <Icon 
                                     name="search"
                                     size={20}
@@ -207,12 +219,12 @@ const Home: React.FC = () => {
                 
                 <Body>
                     <ScrollView style={{ flex:1, paddingHorizontal: 16 }}>
-                        {/* {searchItems.length && (
+                        {searchItems.length ? (
                             <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, marginBottom: 8 }}>
                                 <T2>Resultado da pesquisa</T2>
                             </View>
-                        )}
-                        {searchItems.length && (
+                        ) : null}
+                        {searchItems.length ? (
                             <FlatList
                                 data={searchItems}
                                 renderItem={handleRenderItem}
@@ -221,7 +233,7 @@ const Home: React.FC = () => {
                                 contentContainerStyle={{ paddingVertical: 2 }}
                                 scrollEnabled
                             />
-                        )} */}
+                        ) : null}
                         <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, marginBottom: 8 }}>
                             {/* <T2>Recentes</T2> */}
                             <T2>Últimos adicionados</T2>
@@ -248,7 +260,7 @@ const Home: React.FC = () => {
                             scrollEnabled
                         />
 
-                        {!productItems && <Text>Você não possui nenhum item recente</Text>}
+                        {!productItems.length && <Text>Você não possui nenhum item recente</Text>}
                         
                         <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, marginBottom: 8 }}>
                             <T3>Preste a vencer</T3>
@@ -266,7 +278,7 @@ const Home: React.FC = () => {
                             contentContainerStyle={{ paddingVertical: 2 }}
                             scrollEnabled
                         /> */}
-                        {!productItems && <Text>Você não possui nenhum item recente</Text>}
+                        {!productItems.length && <Text>Você não possui nenhum item recente</Text>}
                         
                         <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, marginBottom: 8 }}>
                             <T3>Listas personalizadas</T3>
@@ -286,7 +298,7 @@ const Home: React.FC = () => {
                     </ScrollView>
                 </Body>
 
-                <AddButton onPress={() => navigation.navigate('AddItem', {id_list: '604be4b65d034d2dc8edf60c', title: 'Default'})}>
+                <AddButton onPress={() => navigation.navigate('AddItem', {id_list: '604c23108d94dc24c14aa3b6', title: 'Default'})}>
                     <Icon 
                         name="plus"
                         size={40}

@@ -62,7 +62,10 @@ import axios from 'axios';
 
 const api = axios.create({
     baseURL: 'http://ec2-18-216-232-131.us-east-2.compute.amazonaws.com:3333/',
-    timeout: 10000
+    timeout: 10000,
+    headers: {
+        "Access-Control-Allow-Origin": "*",
+    }
 });
 
 export default api;

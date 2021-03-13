@@ -13,7 +13,7 @@ const Terms: React.FC = () => {
     return(
         <Container>
             <StatusBar barStyle="dark-content" />
-            <ImageBackground source={Back}>
+            {/* <ImageBackground source={Back}> */}
                 <Head>
                     <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())} >
                         <Icon 
@@ -30,7 +30,7 @@ const Terms: React.FC = () => {
                         <Text>{Term}</Text>
                     </ScrollView>
                 </Body>
-            </ImageBackground>
+            {/* </ImageBackground> */}
         </Container>
     );
 };

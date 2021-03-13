@@ -65,28 +65,40 @@ const AddItem: React.FC = () => {
             // Success Validation
             setLoading(true);
             // TODO: Lógica para adicionar esse item no state do contexto
-            // console.log({
-            //     ...data,
-            //     quantity: Number(data.quantity),
-            //     type: selectedType,
-            //     validity: date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear(),
-            //     id_list
-            // });
+            console.log({
+                ...data,
+                quantity: Number(data.quantity),
+                type: selectedType,
+                validity: date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear(),
+                id_list
+            });
+            // console.log(user?._id); 
             await api.post('item/create', {
                 ...data,
                 type: selectedType,
                 quantity: Number(data.quantity),
                 validity: date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear(),
                 id_list
-            });
-            console.log('Passei da request');
+            },{
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Headers": "Authorization",
+                    "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+                }
+            }).then(() => console.log('Sucesso')).catch(err => console.log(JSON.stringify(err)));
 
             Alert.alert(
                 "Adicionado com sucesso"
             );
 
             // TODO: Resolver o problema do context para as listas se atualizarem quando um for adicionado
-            navigation.dispatch(StackActions.push('List', { id_list, title }));
+            // navigation.dispatch(StackActions.push(JSON.stringify(navigation.dangerouslyGetParent()), { id_list, title }));
+            navigation.navigate('MyList', {
+                screen: 'List',
+                params: {
+                    id_list, title
+                }
+            });
         } catch(err) {
             if(err instanceof Yup.ValidationError){
                 // Validation failed
@@ -101,8 +113,9 @@ const AddItem: React.FC = () => {
             // Se for qualquer outro erro
             Alert.alert(
                 "Erro na autenticação",
-                "Ocorreu um erro ao fazer login, cheque as credenciais"
+                "Ocorreu um erro ao fazer o cadastro do alimento, cheque os campos"
             );
+            console.log(JSON.stringify(err));
         } finally {
             setLoading(false);
         }
@@ -149,7 +162,7 @@ const AddItem: React.FC = () => {
                                 label="Nome do item"
                                 name="name"
                                 placeholder="Ex: Arroz 5kg"
-                                keyboardType="email-address"
+                                keyboardType="default"
                                 autoCapitalize="words"
                                 autoCorrect={false}
                             />
@@ -180,7 +193,7 @@ const AddItem: React.FC = () => {
                                         label="Marca/Empresa"
                                         name="brand"
                                         placeholder="Ex: Tupiniquim"
-                                        keyboardType="email-address"
+                                        keyboardType="default"
                                         autoCapitalize="words"
                                         autoCorrect={false}
                                     />
